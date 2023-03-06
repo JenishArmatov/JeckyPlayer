@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/equalizer_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <LinearLayout
+                android:id="@+id/linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/albom_name_for_playlist"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/equalizer1_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/marginn_minyPlayer"
+                    android:layout_marginBottom="@dimen/marginn_minyPlayer"
+
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="10 - 60 Hz"
+                            android:gravity="center"
+                            />
+
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/equalizer1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="#d00"
+                        android:theme="@style/Progress_color"
+                        />
+                    <TextView
+                        android:id="@+id/tv_equalizer1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="0 db"
+                        android:gravity="center"
+
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/marginn_minyPlayer"
+                    android:layout_marginBottom="@dimen/marginn_minyPlayer"
+                    >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="60 - 120 Hz"
+                            android:gravity="center"/>
+
+
+                    <SeekBar
+                        android:id="@+id/equalizer2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="#d00"
+                        android:theme="@style/Progress_color"
+                        />
+                    <TextView
+                        android:id="@+id/tv_equalizer2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="0 db"
+                        android:gravity="center"/>
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/marginn_minyPlayer"
+                    android:layout_marginBottom="@dimen/marginn_minyPlayer"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="120 - 240 Hz"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/equalizer3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="#d00"
+                        android:theme="@style/Progress_color"
+                        />
+                    <TextView
+                    android:id="@+id/tv_equalizer3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="0 db"
+                    android:gravity="center"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/marginn_minyPlayer"
+                    android:layout_marginBottom="@dimen/marginn_minyPlayer"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="240 - 460 Hz"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/equalizer4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="#d00"
+                        android:theme="@style/Progress_color"
+                        />
+                    <TextView
+                        android:id="@+id/tv_equalizer4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="0 db"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/marginn_minyPlayer"
+                    android:layout_marginBottom="@dimen/marginn_minyPlayer"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="460 - 1050 Hz"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/equalizer5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="#d00"
+                        android:theme="@style/Progress_color"
+                        />
+                    <TextView
+                        android:id="@+id/tv_equalizer5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="0 db"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/marginn_minyPlayer"
+                    android:layout_marginBottom="@dimen/marginn_minyPlayer"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="1050 - 1800 Hz"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/equalizer6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="#d00"
+                        android:theme="@style/Progress_color"
+                        />
+                    <TextView
+                        android:id="@+id/tv_equalizer6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="0 db"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/marginn_minyPlayer"
+                    android:layout_marginBottom="@dimen/marginn_minyPlayer"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="1800 - 4400 Hz"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/equalizer7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="#d00"
+                        android:theme="@style/Progress_color"
+                        />
+                    <TextView
+                        android:id="@+id/tv_equalizer7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="0 db"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/marginn_minyPlayer"
+                    android:layout_marginBottom="@dimen/marginn_minyPlayer"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="4400 - 7000 Hz"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/equalizer8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="#d00"
+                        android:theme="@style/Progress_color"
+                        />
+                    <TextView
+                        android:id="@+id/tv_equalizer8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="0 db"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/marginn_minyPlayer"
+                    android:layout_marginBottom="@dimen/marginn_minyPlayer"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="7000 - 13000 Hz"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/equalizer9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="#d00"
+                        android:theme="@style/Progress_color"
+                        />
+                    <TextView
+                        android:id="@+id/tv_equalizer9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="0 db"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/marginn_minyPlayer"
+                    android:layout_marginBottom="@dimen/marginn_minyPlayer"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="13000 - 18000 Hz"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/equalizer10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="#d00"
+                        android:theme="@style/Progress_color"
+                        />
+                    <TextView
+                        android:id="@+id/tv_equalizer10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="0 db"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    >
+                    <me.tankery.lib.circularseekbar.CircularSeekBar
+                        android:id="@+id/bass_boost"
+                        android:gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/widthHeight_for_imageNav"
+
+                        app:cs_maintain_equal_circle="false"
+                        app:cs_negative_enabled="false"
+                        app:cs_start_angle="-225"
+                        app:cs_end_angle="45"
+                        app:cs_circle_style="round"
+                        app:cs_circle_stroke_width="8dp"
+                        app:cs_pointer_stroke_width="24dp"
+                        app:cs_pointer_halo_width="24dp"/>
+
+
+                    <me.tankery.lib.circularseekbar.CircularSeekBar
+                        android:id="@+id/virtualizer"
+                        android:gravity="center"
+
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/widthHeight_for_imageNav"
+                        app:cs_maintain_equal_circle="false"
+                        app:cs_negative_enabled="false"
+                        app:cs_start_angle="-225"
+                        app:cs_end_angle="45"
+                        app:cs_circle_style="round"
+                        app:cs_circle_stroke_width="8dp"
+                        app:cs_pointer_stroke_width="24dp"
+                        app:cs_pointer_halo_width="24dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:paddingBottom="@dimen/albom_name_for_playlist"
+
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:layout_weight="1"
+
+                        android:text="Bass"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1"
+
+                        android:textStyle="bold"
+                        android:text="Virtualizer"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

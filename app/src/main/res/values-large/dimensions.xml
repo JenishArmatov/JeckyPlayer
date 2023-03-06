@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="artistViewSize">20sp</dimen>
+    <dimen name="tittleViewSize">24sp</dimen>
+    <dimen name="textProgressSize">20sp</dimen>
+    <dimen name="widthHeight_for_bPrev_and_bNext">36dp</dimen>
+    <dimen name="widthHeight_for_bPlay">60dp</dimen>
+    <dimen name="behavior_peekHeight">100dp</dimen>
+    <dimen name="marginn_minyPlayer">12dp</dimen>
+    <dimen name="marginn_buttons_minyPlayer">8dp</dimen>
+    <dimen name="marginn_for_tittleView">24dp</dimen>
+    <dimen name="height_for_playlist">120dp</dimen>
+    <dimen name="albom_name_for_playlist">24dp</dimen>
+    <dimen name="margin_for_image_song">12dp</dimen>
+    <dimen name="widthHeight_for_image">100dp</dimen>
+    <dimen name="widthHeight_imageView_for_edit">40dp</dimen>
+    <dimen name="widthHeight_playlist_dimen_image">32dp</dimen>
+    <dimen name="playlists_name_tSize">24sp</dimen>
+    <dimen name="widthHeight_for_imageNav">275dp</dimen>
+    <dimen name="marginn_for_nav">8dp</dimen>
+    <dimen name="widthHeight_viewPort">12</dimen>
+
+
+
+
+
+</resources>
