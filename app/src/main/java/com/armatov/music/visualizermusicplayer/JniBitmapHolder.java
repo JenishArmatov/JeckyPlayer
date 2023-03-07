@@ -19,6 +19,8 @@ public class JniBitmapHolder
     private native void jniFreeBitmapData(ByteBuffer handler);
 
     private native void jniRotateBitmapCcw90(ByteBuffer handler);
+    private native void jniFlipBitmapVertical(ByteBuffer handler);
+
 
     private native void jniCropBitmap(ByteBuffer handler,final int left,final int top,final int right,final int bottom);
 
@@ -36,6 +38,15 @@ public class JniBitmapHolder
         _handler=jniStoreBitmapData(bitmap);
     }
 
+    public void flipBitmapVertical()
+    {
+        if(_handler==null){
+            Log.d("rotateBitmapCcw90", "nulllllllllll");
+
+            return;
+        }
+        jniFlipBitmapVertical(_handler);
+    }
     public void rotateBitmapCcw90()
     {
         if(_handler==null){
@@ -45,7 +56,6 @@ public class JniBitmapHolder
         }
         jniRotateBitmapCcw90(_handler);
     }
-
     public void cropBitmap(final int left,final int top,final int right,final int bottom)
     {
         if(_handler==null){
@@ -77,7 +87,7 @@ public class JniBitmapHolder
     public void freeBitmap()
     {
         if(_handler==null){
-            Log.d("freeBitmap", "nulllllllllll");
+            Log.d("freeBitmap", "nulllll");
 
             return;
         }

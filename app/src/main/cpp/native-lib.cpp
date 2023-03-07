@@ -388,28 +388,29 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_armatov_music_visualizermusicplayer_JniBitmapHolder_jniRotateBitmapCcw90(JNIEnv *env,
                                                                                   jobject thiz,
-                                                                                  jobject handler) {
+                                                                                  jobject handler)    {
     JniBitmap* jniBitmap = (JniBitmap*) env->GetDirectBufferAddress(handler);
-    if (jniBitmap->_storedBitmapPixels == NULL)
+    if (jniBitmap == NULL || jniBitmap->_storedBitmapPixels == NULL)
         return;
     uint32_t* previousData = jniBitmap->_storedBitmapPixels;
-    AndroidBitmapInfo bitmapInfo = jniBitmap->_bitmapInfo;
-    uint32_t* newBitmapPixels = new uint32_t[bitmapInfo.height * bitmapInfo.width];
-    int whereToPut = 0;
-    // A.D D.C
-    // ...>...
-    // B.C A.B
-    for (int x = bitmapInfo.width - 1; x >= 0; --x)
-        for (int y = 0; y < bitmapInfo.height; ++y)
+    uint32_t newWidth = jniBitmap->_bitmapInfo.height;
+    uint32_t newHeight = jniBitmap->_bitmapInfo.width;
+    jniBitmap->_bitmapInfo.width = newWidth;
+    jniBitmap->_bitmapInfo.height = newHeight;
+    uint32_t* newBitmapPixels = new uint32_t[newWidth * newHeight];
+    int whereToGet = 0;
+    // XY. ... ... ..X
+    // ...>Y..>...>..Y
+    // ... X.. .YX ...
+    for (int x = 0; x < newWidth; ++x)
+        for (int y = newHeight - 1; y >= 0; --y)
         {
-            uint32_t pixel = previousData[bitmapInfo.width * y + x];
-            newBitmapPixels[whereToPut++] = pixel;
+            //take from each row (up to bottom), from left to right
+            uint32_t pixel = previousData[whereToGet++];
+            newBitmapPixels[newWidth * y + x] = pixel;
         }
     delete[] previousData;
     jniBitmap->_storedBitmapPixels = newBitmapPixels;
-    uint32_t temp = bitmapInfo.width;
-    bitmapInfo.width = bitmapInfo.height;
-    bitmapInfo.height = temp;
 }
 extern "C"
 JNIEXPORT void JNICALL
@@ -439,4 +440,45 @@ Java_com_armatov_music_visualizermusicplayer_JniBitmapHolder_jniCropBitmap(JNIEn
     jniBitmap->_storedBitmapPixels = newBitmapPixels;
     jniBitmap->_bitmapInfo.width = newWidth;
     jniBitmap->_bitmapInfo.height = newHeight;
+}
+extern "C"
+JNIEXPORT void JNICALL Java_com_armatov_music_visualizermusicplayer_JniBitmapHolder_jniFlipBitmapVertical(
+        JNIEnv * env, jobject thiz, jobject handle)
+{
+    JniBitmap* jniBitmap = (JniBitmap*) env->GetDirectBufferAddress(handle);
+    if (jniBitmap == NULL || jniBitmap->_storedBitmapPixels == NULL)
+        return;
+    uint32_t* pixels = jniBitmap->_storedBitmapPixels;
+    uint32_t* pixels2 = jniBitmap->_storedBitmapPixels;
+    uint32_t width = jniBitmap->_bitmapInfo.width;
+    uint32_t height = jniBitmap->_bitmapInfo.height;
+    //no need to create a totally new bitmap - it's the exact same size as the original
+    // 1234 fedc
+    // 5678>ba09
+    // 90ab>8765
+    // cdef 4321
+    int whereToGet = 0;
+    for (int y = height - 1; y >= height / 2; --y)
+        for (int x = width - 1; x >= 0; --x)
+        {
+            //take from each row (up to bottom), from left to right
+            uint32_t tempPixel = pixels2[width * y + x];
+            pixels2[width * y + x] = pixels[whereToGet];
+            pixels[whereToGet] = tempPixel;
+            ++whereToGet;
+        }
+    //if the height isn't even, flip the middle row :
+    if (height % 2 == 1)
+    {
+        int y = height / 2;
+        whereToGet = width * y;
+        int lastXToHandle = width % 2 == 0 ? (width / 2) : (width / 2) - 1;
+        for (int x = width - 1; x >= lastXToHandle; --x)
+        {
+            uint32_t tempPixel = pixels2[width * y + x];
+            pixels2[width * y + x] = pixels[whereToGet];
+            pixels[whereToGet] = tempPixel;
+            ++whereToGet;
+        }
+    }
 }
