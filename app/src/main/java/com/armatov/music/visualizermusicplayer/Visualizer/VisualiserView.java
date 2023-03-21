@@ -4,10 +4,12 @@ package com.armatov.music.visualizermusicplayer.Visualizer;
 
 import android.content.Context;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 
+import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +31,7 @@ public class VisualiserView extends View {
     private Visualizer visualiserView;
     public static float[] data = new float[1024*4];
     public Draw draw;
+    public static Bitmap bitmap;
 
 
     public VisualiserView(Context context, AttributeSet attrs, int defStyle)
@@ -63,6 +66,7 @@ public class VisualiserView extends View {
 
     public void init() {
         draw = new Draw(context);
+
 
 
 
@@ -124,10 +128,17 @@ public class VisualiserView extends View {
         v.setEnabled(true);
 
     }
+    public static Bitmap getBitmap(Canvas canvas){
+        if(bitmap == null){
+            bitmap = Bitmap.createBitmap(canvas.getWidth()/2, canvas.getHeight()/2, Bitmap.Config.ARGB_8888);
+        }
+        return bitmap;
+    }
     @Override
     public void draw(Canvas canvas) {
 
         super.draw(canvas);
+
         draw.draw(canvas);
         invalidate();
     }
@@ -141,53 +152,13 @@ public class VisualiserView extends View {
         if (visualiserView != null){
             visualiserView.release();
         }
-
-    }
-
-/*
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        Log.d("///Visualizer", "surfaceCreated");
-
-     //   barGraphRenderer = new BarGraphRenderer(getHolder(), context);
-     //   barGraphRenderer.setRunning(true);
-    //    barGraphRenderer.start();
-
-
-
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.d("///Visualizer", "surfaceChanged");
-
-     //   BarGraphRenderer.drawing = false;
-      //  holder.setFormat(format);
-     //   holder.setFixedSize(width,height);
-     //   BarGraphRenderer.drawing = true;
-        //когда view меняет свой размер
-    }
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        //когда view исчезает из поля зрения
-        BarGraphRenderer.drawing = false;
-        Classic.stars = null;
-        CircleWater.stars = null;
-        barGraphRenderer.setRunning(false); //останавливает процесс
-        Log.d("///Visualizer", "surfaceDestroyed");
-        boolean retry = true;
-        while(retry) {
-            try {
-                barGraphRenderer.join();
-                retry = false;
-            }
-            catch (InterruptedException e) {
-                //не более чем формальность
-            }
+        if (bitmap != null){
+            bitmap = null;
         }
-        BarGraphRenderer.drawing = true;
+
     }
-*/
+
+
 }
 
 

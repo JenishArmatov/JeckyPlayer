@@ -20,8 +20,10 @@ public class JniBitmapHolder
 
     private native void jniRotateBitmapCcw90(ByteBuffer handler);
     private native void jniFlipBitmapVertical(ByteBuffer handler);
+    private native void jniScaleNNBitmap(ByteBuffer handler, int width, int height);
+   // private native Bitmap jnicropAndResizeBitmap(Bitmap bitmap);
 
-
+    public native void cropBitmap(Bitmap inputBitmap, Bitmap outputBitmap);
     private native void jniCropBitmap(ByteBuffer handler,final int left,final int top,final int right,final int bottom);
 
     public JniBitmapHolder()
@@ -69,11 +71,7 @@ public class JniBitmapHolder
 
     public Bitmap getBitmap()
     {
-        if(_handler==null){
-            Log.d("getBitmap", "nulllllllllll");
 
-            return null;
-        }
         return jniGetBitmapFromStoredBitmapData(_handler);
     }
 
@@ -94,6 +92,15 @@ public class JniBitmapHolder
         jniFreeBitmapData(_handler);
         _handler=null;
     }
+    public void scaleNNBitmap(int width, int height)
+    {
+        if(_handler==null){
+            Log.d("freeBitmap", "nulllll");
+
+            return;
+        }
+        jniScaleNNBitmap(_handler, width, height);
+    }
 
     @Override
     protected void finalize() throws Throwable
@@ -104,4 +111,6 @@ public class JniBitmapHolder
         Log.w("DEBUG","JNI bitmap wasn't freed nicely.please rememeber to free the bitmap as soon as you can");
         freeBitmap();
     }
+
+
 }
