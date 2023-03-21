@@ -420,16 +420,18 @@ Java_com_armatov_music_visualizermusicplayer_JniBitmapHolder_jniCropBitmap(JNIEn
                                                                            jint left, jint top,
                                                                            jint right,
                                                                            jint bottom) {
+
     JniBitmap* jniBitmap = (JniBitmap*) env->GetDirectBufferAddress(handler);
+
     if (jniBitmap->_storedBitmapPixels == NULL)
         return;
     uint32_t* previousData = jniBitmap->_storedBitmapPixels;
     uint32_t oldWidth = jniBitmap->_bitmapInfo.width;
-    uint32_t newWidth = right - left, newHeight = bottom - top;
+    uint32_t newWidth = right-left , newHeight = bottom-top ;
     uint32_t* newBitmapPixels = new uint32_t[newWidth * newHeight];
     uint32_t* whereToGet = previousData + left + top * oldWidth;
     uint32_t* whereToPut = newBitmapPixels;
-    for (int y = top; y < bottom; ++y)
+    for (int y = 0; y < bottom; ++y)
     {
         memcpy(whereToPut, whereToGet, sizeof(uint32_t) * newWidth);
         whereToGet += oldWidth;
@@ -481,4 +483,60 @@ JNIEXPORT void JNICALL Java_com_armatov_music_visualizermusicplayer_JniBitmapHol
             ++whereToGet;
         }
     }
+}
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_armatov_music_visualizermusicplayer_JniBitmapHolder_jniCropAndScaleBitmap
+(JNIEnv * env, jobject obj, jobject bitmap, jint cropSize) {
+    AndroidBitmapInfo info;
+    void* pixels = 0;
+
+    // получаем информацию о битмапе
+    if (AndroidBitmap_getInfo(env, bitmap, &info) < 0) {
+        return NULL;
+    }
+
+    // получаем указатель на пиксели битмапа
+    if (AndroidBitmap_lockPixels(env, bitmap, &pixels) < 0) {
+        return NULL;
+    }
+
+    // обходим пиксели исходного битмапа и обрезаем его
+    for (int y = cropSize; y < info.height - cropSize; ++y) {
+        for (int x = cropSize; x < info.width - cropSize; ++x) {
+            // вычисляем новые координаты для пикселя
+            int newX = x - cropSize;
+            int newY = y - cropSize;
+
+            // получаем цвет пикселя
+            uint32_t pixel = ((uint32_t*)pixels)[y * info.width + x];
+
+            // сохраняем цвет пикселя в новом месте в исходном битмапе
+            ((uint32_t*)pixels)[newY * (info.width - 2 * cropSize) + newX] = pixel;
+        }
+    }
+
+    // устанавливаем новые размеры битмапа
+    info.width -= 2 * cropSize;
+    info.height -= 2 * cropSize;
+
+    // разблокируем пиксели битмапа
+    AndroidBitmap_unlockPixels(env, bitmap);
+
+    // создаем новый объект Bitmap
+    jobject newBitmap = env->NewObject(env->FindClass("android/graphics/Bitmap"),
+                                       env->GetMethodID(env->FindClass("android/graphics/Bitmap"),
+                                                        "<init>", "(IILandroid/graphics/Bitmap$Config;)V"),
+                                                        info.width, info.height, NULL);
+
+    // копируем пиксели в новый объект Bitmap
+    if (AndroidBitmap_lockPixels(env, newBitmap, &pixels) < 0) {
+        return NULL;
+    }
+
+    memcpy(pixels, ((uint32_t*)pixels) + cropSize * (info.width - 2 * cropSize), info.width * info.height * sizeof(uint32_t));
+
+    AndroidBitmap_unlockPixels(env, newBitmap);
+
+    return newBitmap;
 }

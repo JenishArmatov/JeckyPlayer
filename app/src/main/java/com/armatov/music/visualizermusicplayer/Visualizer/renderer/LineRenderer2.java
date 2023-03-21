@@ -1,6 +1,7 @@
 package com.armatov.music.visualizermusicplayer.Visualizer.renderer;
 
 import android.graphics.Bitmap;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -18,6 +19,7 @@ public class LineRenderer2 {
     private Matrix matrix;
     private Paint p;
     private  float[] x = new float[1024*4];
+    private static float[] lastFft = new float[100];
 
     public void draw(Canvas canvas, float[] mFftBytes,  Rect rect, int column) {
         int graund = (int) (canvas.getHeight() / 2);
@@ -29,7 +31,7 @@ public class LineRenderer2 {
             rect = new Rect(0,0,canvas.getWidth(),canvas.getHeight());
 
             //p.setShadowLayer(30, 0, 0, Color.RED);
-            //  p.setMaskFilter(new BlurMaskFilter(2, BlurMaskFilter.Blur.NORMAL));
+          //  p.setMaskFilter(new BlurMaskFilter(2, BlurMaskFilter.Blur.NORMAL));
 
         }
         final int w=canvas.getWidth(),height=canvas.getHeight();
@@ -40,7 +42,7 @@ public class LineRenderer2 {
 
 
 // crop a center square from the bitmap, from (0.25,0.25) to (0.75,0.75) of the bitmap.
-        bitmapHolder.cropBitmap(0,4,w,height);
+        bitmapHolder.cropBitmap(0, 3,w,height);
 //rotate the bitmap:
 
 
@@ -50,6 +52,9 @@ public class LineRenderer2 {
 //get the output java bitmap , and free the one on the JNI "world"
         b=bitmapHolder.getBitmapAndFree();
 
+        int k = 1;
+        int lastIndex = 0;
+        int index = 1;
         int speedH = rect.height()/140;
         int speedW = 0;
         float[] newbytes = new float[column];
@@ -65,6 +70,40 @@ public class LineRenderer2 {
         matrix.setRotate(180);
         matrix.postTranslate(rect.width(),rect.height()/2);
         canvas1.setMatrix(matrix);
+        for (int i = 0; i < 100; i++){
+            float highSample = 0;
+            for(int j = lastIndex; j <= index; j++){
+                if(mFftBytes[j] > highSample){
+                    highSample = mFftBytes[j];
+                }
+            }
+
+            lastIndex = index;
+            if(i > 87){
+                if(i < 98){
+                    highSample = highSample - highSample / 3;
+                }
+                index = index + i;
+            }else{
+
+                index = index + k + i/30;
+            }
+            if(i > 87){
+                for (int f = i - 5; f < 100; f++){
+                    if ((lastFft[f] > lastFft[f - 1])) {
+                        lastFft[f-1] = lastFft[f] - lastFft[f]/5;
+                    }
+                }
+            }
+            lastFft[i] = highSample;
+        }
+        for (int f = 82; f < 95; f++){
+            for (int i = 0; i < 5; i++){
+                if (lastFft[f + i] > lastFft[f + i + 1]) {
+                    lastFft[f + i+1] = lastFft[f + i] - lastFft[(f + i)]/5;
+                }
+            }
+        }
 
         for(int i = 0; i < column; i++) {
 
@@ -109,29 +148,29 @@ public class LineRenderer2 {
             if(i < column - 1){
                 canvas1.drawLine(xStart,x[i],
                         xStart + width, x[i + 1],p);
-                canvas1.drawLine(xStart,graund,
-                        xStart + width, graund,p);
+             //   canvas1.drawLine(xStart,graund,
+             //           xStart + width, graund,p);
             }
             if(i == column - 1){
                 canvas1.drawLine(xStart,x[i],
                         xStart + width, graund,p);
-                canvas1.drawLine(xStart,graund,
-                        xStart + width, graund,p);
+             //   canvas1.drawLine(xStart,graund,
+              //          xStart + width, graund,p);
             }
 
             if(i < column - 1){
                 canvas1.drawLine(canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2),x[i],
                         canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2) - width, x[i + 1],p);
-                canvas1.drawLine(canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2),graund,
-                        canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2) - width, graund,p);
+               // canvas1.drawLine(canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2),graund,
+               //         canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2) - width, graund,p);
             }
             if(i == column - 1){
                 canvas1.drawLine(canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2),x[i],
                         canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2) - width, graund,p);
-                canvas1.drawLine(canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2),graund,
-                        canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2) - width, graund,p);
+             //   canvas1.drawLine(canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2),graund,
+             //           canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2) - width, graund,p);
             }
-            width = width - width/(70);
+            width = width - width/(60);
             xStart = xStart + width;
         }
         red = 250;

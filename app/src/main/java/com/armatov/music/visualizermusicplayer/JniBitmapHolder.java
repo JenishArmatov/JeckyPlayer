@@ -20,6 +20,7 @@ public class JniBitmapHolder
 
     private native void jniRotateBitmapCcw90(ByteBuffer handler);
     private native void jniFlipBitmapVertical(ByteBuffer handler);
+    private native Bitmap jniCropAndScaleBitmap(Bitmap bitmap, int size);
 
 
     private native void jniCropBitmap(ByteBuffer handler,final int left,final int top,final int right,final int bottom);
@@ -94,7 +95,13 @@ public class JniBitmapHolder
         jniFreeBitmapData(_handler);
         _handler=null;
     }
-
+    public Bitmap cropAndScaleBitmap(Bitmap bitmap, int size)
+    {
+        Bitmap bitmap1 = jniCropAndScaleBitmap(bitmap,size);
+        if (bitmap1 != null){
+            return bitmap1;
+        }else return bitmap;
+    }
     @Override
     protected void finalize() throws Throwable
     {
