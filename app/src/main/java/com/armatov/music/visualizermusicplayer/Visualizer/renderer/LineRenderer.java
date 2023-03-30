@@ -14,8 +14,8 @@ class LineRenderer {
     private  float[] x = new float[1024*4];
 
     public void draw(Canvas canvas, float[] mFftBytes, Rect rect, int column) {
-        int speedH = rect.height()/100;
-        int speedW = rect.width()/70;
+        int speedH = rect.height()/120;
+        int speedW = rect.width()/90;
         float[] newbytes = new float[column];
         float[][] arrayXYARGB = new float[3][column];
         float width = (canvas.getWidth())/(column*2);
@@ -78,17 +78,6 @@ class LineRenderer {
             if (x[i] > graund) {
                 x[i] = graund;
             }
-
-
-
-
-            p.setColor(Color.argb(255, red, green, blue));
-            p.setStrokeWidth(width);
-            p.setStyle(Paint.Style.STROKE);
-
-            arrayXYARGB[0][i] = xStart;
-            arrayXYARGB[1][i] = x[i];
-
 
         }
         for(int i = 0; i < column; i++) {

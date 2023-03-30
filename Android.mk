@@ -8,6 +8,8 @@ LOCAL_PACKAGE_NAME := MusicPlayer
 
 
 LOCAL_SRC_FILES := native-lib.cpp
+LOCAL_LDLIBS := -landroid -ljnigraphics
+LOCAL_LDLIBS := -llog -landroid
 LOCAL_LDLIBS := -llog
 LOCAL_LDFLAGS += -ljnigraphics
 

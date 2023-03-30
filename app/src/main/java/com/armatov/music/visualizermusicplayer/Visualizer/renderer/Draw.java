@@ -133,14 +133,7 @@ public class Draw {
 
         switch (Player.checkedItem){
             case 0 :
-                if(stepForBluetoothLatency != latencyForBluetooth){
-                    lineRenderer2.draw(canvas, fftHistory[stepForBluetoothLatency + 1],  rect,column);
 
-                }else {
-                    lineRenderer2.draw(canvas, fftHistory[0], rect,column);
-
-                }
-/*
 
                 if(stepForBluetoothLatency != latencyForBluetooth){
                     simpleLineRenderer.draw(fftHistory[stepForBluetoothLatency + 1],rect, canvas);
@@ -148,7 +141,7 @@ public class Draw {
                 }else {
                     simpleLineRenderer.draw(fftHistory[0], rect, canvas);
                 }
-*/
+
                 break;
 
 

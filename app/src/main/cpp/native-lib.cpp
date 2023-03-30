@@ -6,8 +6,8 @@
 #include <android/log.h>
 #include <cstring>
 #include <unistd.h>
+#include <android/native_window_jni.h>
 #define  LOG_TAG    "DEBUG"
-#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
 class JniBitmap
@@ -420,18 +420,16 @@ Java_com_armatov_music_visualizermusicplayer_JniBitmapHolder_jniCropBitmap(JNIEn
                                                                            jint left, jint top,
                                                                            jint right,
                                                                            jint bottom) {
-
     JniBitmap* jniBitmap = (JniBitmap*) env->GetDirectBufferAddress(handler);
-
     if (jniBitmap->_storedBitmapPixels == NULL)
         return;
     uint32_t* previousData = jniBitmap->_storedBitmapPixels;
     uint32_t oldWidth = jniBitmap->_bitmapInfo.width;
-    uint32_t newWidth = right-left , newHeight = bottom-top ;
+    uint32_t newWidth = right - left, newHeight = bottom - top;
     uint32_t* newBitmapPixels = new uint32_t[newWidth * newHeight];
     uint32_t* whereToGet = previousData + left + top * oldWidth;
     uint32_t* whereToPut = newBitmapPixels;
-    for (int y = 0; y < bottom; ++y)
+    for (int y = top; y < bottom; ++y)
     {
         memcpy(whereToPut, whereToGet, sizeof(uint32_t) * newWidth);
         whereToGet += oldWidth;
@@ -443,100 +441,129 @@ Java_com_armatov_music_visualizermusicplayer_JniBitmapHolder_jniCropBitmap(JNIEn
     jniBitmap->_bitmapInfo.width = newWidth;
     jniBitmap->_bitmapInfo.height = newHeight;
 }
+
 extern "C"
 JNIEXPORT void JNICALL Java_com_armatov_music_visualizermusicplayer_JniBitmapHolder_jniFlipBitmapVertical(
         JNIEnv * env, jobject thiz, jobject handle)
 {
     JniBitmap* jniBitmap = (JniBitmap*) env->GetDirectBufferAddress(handle);
-    if (jniBitmap == NULL || jniBitmap->_storedBitmapPixels == NULL)
+    if (jniBitmap->_storedBitmapPixels == NULL)
         return;
+
     uint32_t* pixels = jniBitmap->_storedBitmapPixels;
-    uint32_t* pixels2 = jniBitmap->_storedBitmapPixels;
     uint32_t width = jniBitmap->_bitmapInfo.width;
     uint32_t height = jniBitmap->_bitmapInfo.height;
-    //no need to create a totally new bitmap - it's the exact same size as the original
-    // 1234 fedc
-    // 5678>ba09
-    // 90ab>8765
-    // cdef 4321
-    int whereToGet = 0;
-    for (int y = height - 1; y >= height / 2; --y)
-        for (int x = width - 1; x >= 0; --x)
-        {
-            //take from each row (up to bottom), from left to right
-            uint32_t tempPixel = pixels2[width * y + x];
-            pixels2[width * y + x] = pixels[whereToGet];
-            pixels[whereToGet] = tempPixel;
-            ++whereToGet;
-        }
-    //if the height isn't even, flip the middle row :
-    if (height % 2 == 1)
-    {
-        int y = height / 2;
-        whereToGet = width * y;
-        int lastXToHandle = width % 2 == 0 ? (width / 2) : (width / 2) - 1;
-        for (int x = width - 1; x >= lastXToHandle; --x)
-        {
-            uint32_t tempPixel = pixels2[width * y + x];
-            pixels2[width * y + x] = pixels[whereToGet];
-            pixels[whereToGet] = tempPixel;
-            ++whereToGet;
-        }
+    uint32_t* rowBuffer = new uint32_t[width];
+
+    // Iterate over each row, swapping it with the corresponding row from the other end of the bitmap
+    for (int y = 0; y < height / 2; y++) {
+        int otherY = height - y - 1;
+        memcpy(rowBuffer, &pixels[y * width], width * sizeof(uint32_t));
+        memcpy(&pixels[y * width], &pixels[otherY * width], width * sizeof(uint32_t));
+        memcpy(&pixels[otherY * width], rowBuffer, width * sizeof(uint32_t));
     }
+
+    // Clean up temporary buffer
+    delete[] rowBuffer;
 }
+
 extern "C"
-JNIEXPORT jobject JNICALL
-Java_com_armatov_music_visualizermusicplayer_JniBitmapHolder_jniCropAndScaleBitmap
-(JNIEnv * env, jobject obj, jobject bitmap, jint cropSize) {
-    AndroidBitmapInfo info;
-    void* pixels = 0;
 
-    // получаем информацию о битмапе
-    if (AndroidBitmap_getInfo(env, bitmap, &info) < 0) {
-        return NULL;
-    }
+JNIEXPORT void JNICALL Java_com_armatov_music_visualizermusicplayer_JniBitmapHolder_jniScaleNNBitmap(
+        JNIEnv * env, jobject thiz, jobject handle, jint newWidth,
+        jint newHeight)
+{
+    JniBitmap* jniBitmap = reinterpret_cast<JniBitmap*>(env->GetDirectBufferAddress(handle));
+    if (jniBitmap == nullptr || jniBitmap->_storedBitmapPixels == nullptr)
+        return;
 
-    // получаем указатель на пиксели битмапа
-    if (AndroidBitmap_lockPixels(env, bitmap, &pixels) < 0) {
-        return NULL;
-    }
+    uint32_t* previousData = jniBitmap->_storedBitmapPixels;
+    uint32_t oldWidth = jniBitmap->_bitmapInfo.width;
+    uint32_t oldHeight = jniBitmap->_bitmapInfo.height;
+    uint32_t* newBitmapPixels = new uint32_t[newWidth * newHeight];
 
-    // обходим пиксели исходного битмапа и обрезаем его
-    for (int y = cropSize; y < info.height - cropSize; ++y) {
-        for (int x = cropSize; x < info.width - cropSize; ++x) {
-            // вычисляем новые координаты для пикселя
-            int newX = x - cropSize;
-            int newY = y - cropSize;
+    for (int y = 0; y < newHeight; ++y) {
+        float yRatio = (float)(y * oldHeight) / newHeight;
+        int yIndex = (int) yRatio;
 
-            // получаем цвет пикселя
-            uint32_t pixel = ((uint32_t*)pixels)[y * info.width + x];
+        for (int x = 0; x < newWidth; ++x) {
+            float xRatio = (float)(x * oldWidth) / newWidth;
+            int xIndex = (int) xRatio;
 
-            // сохраняем цвет пикселя в новом месте в исходном битмапе
-            ((uint32_t*)pixels)[newY * (info.width - 2 * cropSize) + newX] = pixel;
+            int pixelIndex = (yIndex * oldWidth) + xIndex;
+            uint32_t pixel = previousData[pixelIndex];
+            newBitmapPixels[(y * newWidth) + x] = pixel;
         }
     }
 
-    // устанавливаем новые размеры битмапа
-    info.width -= 2 * cropSize;
-    info.height -= 2 * cropSize;
+    delete[] previousData;
+    jniBitmap->_storedBitmapPixels = newBitmapPixels;
+    jniBitmap->_bitmapInfo.width = newWidth;
+    jniBitmap->_bitmapInfo.height = newHeight;
+}
 
-    // разблокируем пиксели битмапа
-    AndroidBitmap_unlockPixels(env, bitmap);
+extern "C"
 
-    // создаем новый объект Bitmap
-    jobject newBitmap = env->NewObject(env->FindClass("android/graphics/Bitmap"),
-                                       env->GetMethodID(env->FindClass("android/graphics/Bitmap"),
-                                                        "<init>", "(IILandroid/graphics/Bitmap$Config;)V"),
-                                                        info.width, info.height, NULL);
+JNIEXPORT void JNICALL
+Java_com_armatov_music_visualizermusicplayer_JniBitmapHolder_cropBitmap(JNIEnv *env, jobject thiz,
+                                                            jobject input_bitmap,
+                                                            jobject output_bitmap) {
+    AndroidBitmapInfo input_bitmap_info;
+    AndroidBitmapInfo output_bitmap_info;
+    void *input_pixels;
+    void *output_pixels;
 
-    // копируем пиксели в новый объект Bitmap
-    if (AndroidBitmap_lockPixels(env, newBitmap, &pixels) < 0) {
-        return NULL;
+    // Get input bitmap info
+    if (AndroidBitmap_getInfo(env, input_bitmap, &input_bitmap_info) < 0) {
+        return;
     }
 
-    memcpy(pixels, ((uint32_t*)pixels) + cropSize * (info.width - 2 * cropSize), info.width * info.height * sizeof(uint32_t));
+    // Get output bitmap info
+    if (AndroidBitmap_getInfo(env, output_bitmap, &output_bitmap_info) < 0) {
+        return;
+    }
 
-    AndroidBitmap_unlockPixels(env, newBitmap);
+    // Check if input and output bitmaps have the same dimensions and format
+    if (input_bitmap_info.width != output_bitmap_info.width ||
+        input_bitmap_info.height != output_bitmap_info.height ||
+        input_bitmap_info.format != output_bitmap_info.format) {
+        return;
+    }
 
-    return newBitmap;
+    // Lock input bitmap pixels for reading
+    if (AndroidBitmap_lockPixels(env, input_bitmap, &input_pixels) < 0) {
+        return;
+    }
+
+    // Lock output bitmap pixels for writing
+    if (AndroidBitmap_lockPixels(env, output_bitmap, &output_pixels) < 0) {
+        AndroidBitmap_unlockPixels(env, input_bitmap);
+        return;
+    }
+
+    // Crop the bitmap from all sides by 1/100
+    int crop_left = input_bitmap_info.width / 100;
+    int crop_top = input_bitmap_info.height / 100;
+    int crop_right = input_bitmap_info.width - crop_left;
+    int crop_bottom = input_bitmap_info.height - crop_top;
+
+    // Apply the tunnel effect by scaling the cropped bitmap back to its original dimensions
+    for (int y = 0; y < output_bitmap_info.height; y++) {
+        for (int x = 0; x < output_bitmap_info.width; x++) {
+            int input_x = crop_left + x * (crop_right - crop_left) / output_bitmap_info.width;
+            int input_y = crop_top + y * (crop_bottom - crop_top) / output_bitmap_info.height;
+            int output_index = y * output_bitmap_info.stride + x * 4;
+            int input_index = input_y * input_bitmap_info.stride + input_x * 4;
+            ((uint32_t *) output_pixels)[output_index >> 2] = ((uint32_t *) input_pixels)[input_index >> 2];
+        }
+    }
+
+    // Unlock input and output bitmaps
+    AndroidBitmap_unlockPixels(env, input_bitmap);
+    AndroidBitmap_unlockPixels(env, output_bitmap);
 }
+
+
+
+
+
