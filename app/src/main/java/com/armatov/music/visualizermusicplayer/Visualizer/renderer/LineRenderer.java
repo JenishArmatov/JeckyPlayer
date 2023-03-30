@@ -17,7 +17,6 @@ class LineRenderer {
         int speedH = rect.height()/120;
         int speedW = rect.width()/90;
         float[] newbytes = new float[column];
-        float[][] arrayXYARGB = new float[3][column];
         float width = (canvas.getWidth())/(column*2);
         int graund = (canvas.getHeight() / 4);
         canvas.drawColor(Color.argb(255,0,0,0));
@@ -107,19 +106,19 @@ class LineRenderer {
             p.setStrokeWidth(2);
 
             if(i < column - 1){
-                canvas1.drawLine(xStart,arrayXYARGB[1][i],
-                        xStart + width, arrayXYARGB[1][i + 1],p);
+                canvas1.drawLine(xStart,x[i],
+                        xStart + width, x[i + 1],p);
             }
             if(i == column - 1){
-                canvas1.drawLine(xStart,arrayXYARGB[1][i],
+                canvas1.drawLine(xStart,x[i],
                         xStart + width, graund,p);
             }
             if(i < column - 1){
-                canvas1.drawLine(rect.centerX() - xStart,arrayXYARGB[1][i],
-                        rect.centerX() - xStart - width, arrayXYARGB[1][i + 1],p);
+                canvas1.drawLine(rect.centerX() - xStart,x[i],
+                        rect.centerX() - xStart - width,x[i + 1],p);
             }
             if(i == column - 1){
-                canvas1.drawLine(rect.centerX() - xStart,arrayXYARGB[1][i],
+                canvas1.drawLine(rect.centerX() - xStart,x[i],
                         rect.centerX() - xStart - width, graund,p);
             }
 

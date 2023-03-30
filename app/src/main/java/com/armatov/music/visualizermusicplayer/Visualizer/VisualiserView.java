@@ -31,7 +31,6 @@ public class VisualiserView extends View {
     private Visualizer visualiserView;
     public static float[] data = new float[1024*4];
     public Draw draw;
-    public static Bitmap bitmap;
 
 
     public VisualiserView(Context context, AttributeSet attrs, int defStyle)
@@ -66,7 +65,8 @@ public class VisualiserView extends View {
 
     public void init() {
         draw = new Draw(context);
-
+        data = new float[1024*4];
+        lastFFt = new float[1024*4];
 
 
 
@@ -128,12 +128,7 @@ public class VisualiserView extends View {
         v.setEnabled(true);
 
     }
-    public static Bitmap getBitmap(Canvas canvas){
-        if(bitmap == null){
-            bitmap = Bitmap.createBitmap(canvas.getWidth()/2, canvas.getHeight()/2, Bitmap.Config.ARGB_8888);
-        }
-        return bitmap;
-    }
+
     @Override
     public void draw(Canvas canvas) {
 
@@ -152,9 +147,7 @@ public class VisualiserView extends View {
         if (visualiserView != null){
             visualiserView.release();
         }
-        if (bitmap != null){
-            bitmap = null;
-        }
+
 
     }
 

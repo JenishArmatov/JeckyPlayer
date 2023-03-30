@@ -213,6 +213,11 @@ public class VisualizerChangeAdapter extends RecyclerView.Adapter<VisualizerChan
 
                 }
                 if(holder.getAdapterPosition() > 1){
+                    ///
+                    Player.checkedItem = holder.getAdapterPosition();
+                    activity.onBackPressed();
+                    PreferenceUtil.getInstance(activity.getApplicationContext()).setCheckedItem(holder.getAdapterPosition());
+/*
                     if (realTime > oldTime){
                         showVideo();
                     }else {
@@ -220,6 +225,8 @@ public class VisualizerChangeAdapter extends RecyclerView.Adapter<VisualizerChan
                         activity.onBackPressed();
                         PreferenceUtil.getInstance(activity.getApplicationContext()).setCheckedItem(holder.getAdapterPosition());
                     }
+
+ */
                 }
 
 
