@@ -17,7 +17,7 @@ public class BarGraphRenderer extends Thread
     public BarGraphRenderer(Context context)
     {
         super();
-        draw = new Draw(context);
+        //draw = new Draw(context);
         mRunning = false;
 
     }

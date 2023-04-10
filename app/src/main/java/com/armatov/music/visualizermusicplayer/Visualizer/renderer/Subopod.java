@@ -19,45 +19,71 @@ public class Subopod {
     private Matrix matrix;
     private Paint p;
     private  float[] x = new float[1024*4];
+    private float angle;
+    private boolean right = true;
 
     public void draw(Canvas canvas, float[] mFftBytes,  Rect rect, int column) {
-        int graund = (int) (canvas.getHeight() / 2);
-        rect = new Rect(0,0,canvas.getWidth(),canvas.getHeight());
+        rect = new Rect(0,0,canvas.getWidth()/2,canvas.getHeight()/2);
+        int graund = (int) (rect.height() / 2);
+
         canvas.drawColor(Color.argb(255,0,0,0));
         if (b == null){
-            b = Bitmap.createBitmap(canvas.getWidth(),canvas.getHeight(), Bitmap.Config.ARGB_8888);
+            b = Bitmap.createBitmap(rect.width(),rect.height(), Bitmap.Config.ARGB_4444);
+
             matrix = new Matrix();
             p = new Paint();
             //p.setShadowLayer(30, 0, 0, Color.RED);
             //  p.setMaskFilter(new BlurMaskFilter(2, BlurMaskFilter.Blur.NORMAL));
 
         }
-        final int w=canvas.getWidth(),height=canvas.getHeight();
+
+        final Bitmap output = Bitmap.createBitmap(rect.width(),rect.height(), Bitmap.Config.ARGB_4444);
+
+        final int w = rect.width(), height = rect.height();
 // store the bitmap in the JNI "world"
-        final JniBitmapHolder bitmapHolder = new JniBitmapHolder(b);
+        final JniBitmapHolder bitmapHolder = new JniBitmapHolder();
 // no need for the bitmap on the java "world", since the operations are done on the JNI "world"
-        b.recycle();
+   //     b.recycle();
 
 
 // crop a center square from the bitmap, from (0.25,0.25) to (0.75,0.75) of the bitmap.
-        bitmapHolder.cropBitmap(0,8,w,height);
+        bitmapHolder.cropBitmap(b,output);
 //rotate the bitmap:
 //get the output java bitmap , and free the one on the JNI "world"
-        b=bitmapHolder.getBitmapAndFree();
+      //  b=bitmapHolder.getBitmapAndFree();
 
 
         float[] newbytes = new float[column];
         float[][] arrayXYARGB = new float[3][column];
-        float width = (canvas.getWidth())/(column);
+        float width = (rect.width())/(column);
         float xStart = rect.width()/2;
         p.setStrokeWidth(2);
 
 
 
-        Canvas canvas1 = new Canvas(b);
+        Canvas canvas1 = new Canvas(output);
         matrix.reset();
         matrix.setRotate(180);
         matrix.postTranslate(rect.width(),rect.height());
+        if(right){
+            if(angle > 358){
+                right = false;
+            }
+            angle = angle + 0.1f;
+            angle = (angle + mFftBytes[3]/10);
+
+        }
+        if(!right){
+            if(angle < 0){
+                right = true;
+            }
+            angle = angle - 0.1f;
+            angle = (angle - mFftBytes[3]/10);
+
+        }
+        matrix.preRotate(angle,rect.width()/2, height/2);
+     //   matrix.preScale(angle/360,angle/360, w-angle/360, height-angle/360);
+
         canvas1.setMatrix(matrix);
 
         for(int i = 0; i < column; i++) {
@@ -108,8 +134,21 @@ public class Subopod {
 
 
             if(i < column - 1){
-                canvas1.drawLine(canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2),x[i],
-                        canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2) - width, x[i + 1],p);
+                canvas1.drawLine(rect.width()/2 - (xStart - rect.width()/2),x[i],
+                        rect.width()/2 - (xStart - rect.width()/2) - width, x[i + 1],p);
+
+            }
+
+            if(i < column - 1){
+                canvas1.drawLine(xStart,graund*2 - x[i],
+                        xStart + width, graund*2 - x[i + 1],p);
+
+            }
+
+
+            if(i < column - 1){
+                canvas1.drawLine(rect.width()/2 - (xStart - rect.width()/2),graund*2 - x[i],
+                        rect.width()/2 - (xStart - rect.width()/2) - width, graund*2 - x[i + 1],p);
 
             }
 
@@ -122,8 +161,10 @@ public class Subopod {
         matrix.reset();
         matrix.setRotate(180);
         matrix.postTranslate(rect.width(),rect.height());
+        //matrix.setScale(angle/300,angle/300, w, height);
         canvas.setMatrix(matrix);
-        canvas.drawBitmap(b,0,0,p);
+        canvas.drawBitmap(output, rect, new Rect(0-rect.width(),0-rect.height(), rect.width(),rect.height()), p);
+        b = Bitmap.createBitmap(output, 0,0,rect.width(),rect.height());
 
     }
     private void calcolateColor(int i){

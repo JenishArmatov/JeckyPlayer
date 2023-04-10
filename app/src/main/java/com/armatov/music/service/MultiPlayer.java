@@ -3,7 +3,9 @@ package com.armatov.music.service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.audiofx.AudioEffect;
+import android.media.audiofx.Visualizer;
 import android.net.Uri;
 import android.os.PowerManager;
 import android.util.Log;
@@ -16,11 +18,13 @@ import com.h6ah4i.android.media.IBasicMediaPlayer;
 import com.h6ah4i.android.media.IMediaPlayerFactory;
 import com.h6ah4i.android.media.audiofx.IBassBoost;
 import com.h6ah4i.android.media.audiofx.IEqualizer;
+import com.h6ah4i.android.media.audiofx.IHQVisualizer;
 import com.h6ah4i.android.media.audiofx.IVirtualizer;
 import com.armatov.music.R;
 import com.armatov.music.service.playback.Playback;
 import com.armatov.music.util.PreferenceUtil;
 import com.h6ah4i.android.media.opensl.OpenSLMediaPlayer;
+import com.h6ah4i.android.media.opensl.audiofx.OpenSLHQVisualizer;
 
 public class MultiPlayer implements Playback, IBasicMediaPlayer.OnErrorListener, IBasicMediaPlayer.OnCompletionListener {
     public static final String TAG = MultiPlayer.class.getSimpleName();
@@ -37,9 +41,11 @@ public class MultiPlayer implements Playback, IBasicMediaPlayer.OnErrorListener,
     private final Context context;
     @Nullable
     private Playback.PlaybackCallbacks callbacks;
-
+    private OpenSLHQVisualizer v;
+    private Visualizer visualiserView;
     private boolean mIsInitialized = false;
-
+    public static float[] lastFFt = new float[1024*4];
+    public static float[] data = new float[1024*4];
     public MultiPlayer(final Context context, IMediaPlayerFactory f) {
         this.context = context;
         this.factory = f;
@@ -48,6 +54,7 @@ public class MultiPlayer implements Playback, IBasicMediaPlayer.OnErrorListener,
 
   //      visualiserView.link(factory);
         mCurrentMediaPlayer = (OpenSLMediaPlayer) factory.createMediaPlayer();
+        link(factory);
 
         equalizer = factory.createHQEqualizer();
         equalizer.setEnabled(true);
@@ -202,6 +209,12 @@ public class MultiPlayer implements Playback, IBasicMediaPlayer.OnErrorListener,
         if (mNextMediaPlayer != null) {
             mNextMediaPlayer.release();
         }
+        if (v != null){
+            v.release();
+        }
+        if (visualiserView != null){
+            visualiserView.release();
+        }
     }
 
     /**
@@ -324,5 +337,61 @@ public class MultiPlayer implements Playback, IBasicMediaPlayer.OnErrorListener,
             if (callbacks != null)
                 callbacks.onSongEnded();
         }
+    }
+    public void link(MediaPlayer factory)
+    {
+        visualiserView = new Visualizer(factory.getAudioSessionId());
+        Visualizer.OnDataCaptureListener listener = new Visualizer.OnDataCaptureListener() {
+            @Override
+            public void onWaveFormDataCapture(Visualizer visualizer, byte[] waveform, int samplingRate) {
+                for(int i = 1; i < waveform.length; i++) {
+                }
+            }
+            @Override
+            public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
+                lastFFt = new float[1024*4];
+                for(int i = 21; i < fft.length/2; i++) {
+                    float w = ((fft[(i - 20)*2]*fft[(i - 20)*2]));
+                    float q = ((fft[(i - 20)*2+1]*fft[(i - 20)*2+1]));
+                    float res = (w+q)/2;
+                    res = res > 1 ? (int) ( 30* Math.log10(res*res)) : 1;
+                    lastFFt[i] = res;
+                }
+            }
+        };
+
+        visualiserView.setDataCaptureListener(listener,
+                Visualizer.getMaxCaptureRate(), true, true);
+        visualiserView.setEnabled(true);
+
+    }
+    public void link(IMediaPlayerFactory factory)
+    {
+        v = (OpenSLHQVisualizer) factory.createHQVisualizer();;
+        v.setCaptureSize(1024*4);
+
+
+
+
+
+
+        IHQVisualizer.OnDataCaptureListener listener = new IHQVisualizer.OnDataCaptureListener() {
+            @Override
+            public void onWaveFormDataCapture(IHQVisualizer visualizer, float[] waveform, int numChannels, int samplingRate) {
+                data = waveform;
+
+            }
+
+            @Override
+            public void onFftDataCapture(IHQVisualizer visualizer, float[] fft, int numChannels, int samplingRate) {
+                lastFFt = fft;
+
+            }
+
+        };
+        v.setDataCaptureListener(listener,
+                Visualizer.getMaxCaptureRate(), true, true);
+        v.setEnabled(true);
+
     }
 }

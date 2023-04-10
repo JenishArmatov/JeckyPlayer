@@ -14,7 +14,9 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.audiofx.AudioEffect;
+import android.media.audiofx.Visualizer;
 import android.media.session.MediaSession;
 import android.os.Binder;
 import android.os.Build;
@@ -61,7 +63,6 @@ import com.armatov.music.service.notification.PlayingNotificationImpl24;
 import com.armatov.music.util.MusicUtil;
 import com.armatov.music.util.PreferenceUtil;
 import com.armatov.music.util.Util;
-import com.armatov.music.visualizermusicplayer.Visualizer.VisualiserView;
 import com.bumptech.glide.BitmapRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -185,7 +186,6 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
 
     private Handler uiThreadHandler;
 
-    public VisualiserView visualiserView;
     public IMediaPlayerFactory factory;
 
     private static String getSongUri(@NonNull Song song) {
@@ -208,13 +208,10 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
         playback = new MultiPlayer(this, factory);
         playback.setCallbacks(this);
 
-        visualiserView = new VisualiserView(getApplicationContext());
-        visualiserView.init();
-        visualiserView.link(factory);
+
 
         setupMediaSession();
 
-        //visualiserView.addView(unityPlayer);
         // queue saving needs to run on a separate thread so that it doesn't block the playback handler events
         queueSaveHandlerThread = new HandlerThread("QueueSaveHandler", Process.THREAD_PRIORITY_BACKGROUND);
         queueSaveHandlerThread.start();
@@ -362,18 +359,12 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                         break;
                     case ACTION_REWIND:
                         back(true);
-                        if(visualiserView != null){
-                            visualiserView.release();
-                            visualiserView.link(factory);
-                        }
+
+
 
                         break;
                     case ACTION_SKIP:
-                        if(visualiserView != null){
-                            visualiserView.release();
-                            visualiserView.link(factory);
 
-                        }
                         playNextSong(true);
                         break;
                     case ACTION_TOGGLE_FAVORITE:
@@ -1477,4 +1468,6 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
             }
         }
     }
+
+
 }

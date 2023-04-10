@@ -7,10 +7,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import com.armatov.music.service.MultiPlayer;
 import com.armatov.music.util.PreferenceUtil;
 
 import com.armatov.music.visualizermusicplayer.Visualizer.Player;
-import com.armatov.music.visualizermusicplayer.Visualizer.VisualiserView;
 
 
 import java.text.DateFormat;
@@ -57,6 +57,7 @@ public class Draw {
     public int stepForBluetoothLatency = 1;
     private int latencyForBluetooth;
     private float[] fft = new float[1024*4];
+    private Context context;
 
 
     private boolean chekBluetooth(){
@@ -86,6 +87,7 @@ public class Draw {
         circleWater = new CircleWater();
         classic = new Classic();
         lineRenderer = new LineRenderer();
+        this.context = context;
 
         setPlayerPos(context);
     }
@@ -121,7 +123,7 @@ public class Draw {
             latencyForBluetooth = 0;
 
         }
-        System.arraycopy(VisualiserView.data,0,data, 0, VisualiserView.data.length/2);
+        System.arraycopy(MultiPlayer.data,0,data, 0, MultiPlayer.data.length/2);
         calculateFft();
         fftHistory[stepForBluetoothLatency] = fft.clone();
 
@@ -133,7 +135,6 @@ public class Draw {
 
         switch (Player.checkedItem){
             case 0 :
-
 
                 if(stepForBluetoothLatency != latencyForBluetooth){
                     simpleLineRenderer.draw(fftHistory[stepForBluetoothLatency + 1],rect, canvas);
@@ -395,7 +396,7 @@ public class Draw {
         initColorChange();
 
         float[] lastFFt = new float[1024*4];
-        System.arraycopy(VisualiserView.lastFFt,0,lastFFt, 0, VisualiserView.lastFFt.length/2);
+        System.arraycopy(MultiPlayer.lastFFt,0,lastFFt, 0, MultiPlayer.lastFFt.length/2);
 
         int lenth = lastFFt.length/2;
 

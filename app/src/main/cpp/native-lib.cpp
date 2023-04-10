@@ -542,8 +542,8 @@ Java_com_armatov_music_visualizermusicplayer_JniBitmapHolder_cropBitmap(JNIEnv *
     }
 
     // Crop the bitmap from all sides by 1/100
-    int crop_left = input_bitmap_info.width / 100;
-    int crop_top = input_bitmap_info.height / 100;
+    int crop_left = input_bitmap_info.width / 50;
+    int crop_top = input_bitmap_info.height / 50;
     int crop_right = input_bitmap_info.width - crop_left;
     int crop_bottom = input_bitmap_info.height - crop_top;
 
