@@ -2,6 +2,7 @@ package com.armatov.music.visualizermusicplayer.Visualizer.renderer;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 
 public class BarGraphRenderer extends Thread

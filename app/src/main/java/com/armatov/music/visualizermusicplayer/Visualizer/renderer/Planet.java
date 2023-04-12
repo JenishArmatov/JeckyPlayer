@@ -15,22 +15,7 @@ public class Planet {
 
     public void draw(Canvas canvas, float[] mFftBytes,
                      Rect rect, Paint paint) {
-  //      Random random = new Random();
-       /* if(stars == null){
-            stars = new float[5][200];
-            for(int i = 0 ; i < 200; i++){
-                int xRandom = random.nextInt(rect.width()/2);
-                stars[0][i] = xRandom;
-                int xRandomW = random.nextInt(rect.width()/2);
-                stars[3][i] = xRandomW;
-                stars[1][i] = 1;
-                stars[2][i] = 0.08f;
-                stars[4][i] = 0.5f;
 
-            }
-        }
-
-        */
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(10);
         canvas.drawColor(Color.argb(255,0,0,0));
@@ -55,48 +40,7 @@ public class Planet {
         int k = 1;
         int lastIndex = 0;
         int index = 1;
-        /*
-        for(int i = 0 ; i < 200; i++){
 
-            p.setColor(Color.argb(255, random.nextInt(250), random.nextInt(200), random.nextInt(250)));
-
-            if(stars[0][i] > rect.centerX()){
-                int xRandom = random.nextInt(rect.width()/2);
-                stars[0][i] = xRandom;
-                stars[2][i] = 0.08f;
-                stars[1][i] = 1;
-            }
-
-            if(i < 199 && stars[0][i] == stars[0][i+1]){
-                stars[0][i] = random.nextInt(rect.height()/2);
-
-            }
-            stars[2][i] = stars[2][i] + 0.08f;
-            stars[0][i] = stars[0][i] + magAlpha/15 + stars[2][i];
-            stars[1][i] = stars[1][i] + magAlpha/150 + 0.2f;
-            float[] cartPoint = {
-                    (float) (i) / (200),
-                    rect.height() / 4 + ((stars[0][i])) * (rect.height() / 2) / 128
-            };
-            float[] polarPoint = toPolar(cartPoint, new Rect(0,0,canvas.getWidth(),canvas.getHeight()));
-            canvas.drawCircle(polarPoint[0],polarPoint[1],stars[1][i],p);
-            if(i < 50){
-                if(stars[3][i] > rect.centerX()){
-                    stars[3][i] = 0;
-                    stars[4][i] = 0.5f;
-                }
-                stars[3][i] = stars[3][i] + magAlpha/30 + stars[4][i];
-                p.setColor(Color.WHITE);
-                float[] cartPoint1 = {
-                        (float) (i) / (50),
-                        rect.height() / 4 + ((stars[3][i])) * (rect.height() / 2) / 128
-                };
-                float[] polarPoint1 = toPolar(cartPoint1, new Rect(0,0,canvas.getWidth(),canvas.getHeight()));
-                canvas.drawCircle(polarPoint1[0],polarPoint1[1],2,p);
-            }
-
-        }
-        */
         for(int i = 0; i < 100; i++) {
             float highSample = 0;
             if(i < 15 && i > 0){

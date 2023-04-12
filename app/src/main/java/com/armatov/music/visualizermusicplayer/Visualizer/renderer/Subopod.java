@@ -70,7 +70,7 @@ public class Subopod {
                 right = false;
             }
             angle = angle + 0.1f;
-            angle = (angle + mFftBytes[3]/10);
+            angle = (angle + mFftBytes[3]/15);
 
         }
         if(!right){
@@ -78,7 +78,7 @@ public class Subopod {
                 right = true;
             }
             angle = angle - 0.1f;
-            angle = (angle - mFftBytes[3]/10);
+            angle = (angle - mFftBytes[3]/15);
 
         }
         matrix.preRotate(angle,rect.width()/2, height/2);
@@ -93,7 +93,7 @@ public class Subopod {
             if (newbytes[i] > graund) {
                 newbytes[i] = graund;
             }
-            x[i] = (x[i] + x[i] + newbytes[i])/3;
+            x[i] = (x[i] + x[i] + x[i] + newbytes[i])/4;
 
             if (i > 0 && x[i] < x[i - 1]) {
                 x[i - 1] = x[i];
@@ -187,5 +187,15 @@ public class Subopod {
             blue= blue - 2;
         }
     }
-
+    private float[] toPolar(float[] cartesian, Rect rect) {
+        double cX = rect.width() / 2;
+        double cY = rect.height() / 2;
+        double angle = (cartesian[0]) * 2 * Math.PI;
+        double radius = ((rect.width() / 3) + cartesian[1])/10 ;
+        float[] out = {
+                (float) (cX + radius * Math.sin(angle)),
+                (float) (cY + radius * Math.cos(angle))
+        };
+        return out;
+    }
 }

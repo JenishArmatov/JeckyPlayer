@@ -43,21 +43,7 @@ class LineRenderer {
 
         Canvas canvas1 = new Canvas(bitmapLine);
         for(int i = 0; i < column; i++) {
-            float highSample = 0;
-            for(int j = lastIndex; j <= index; j++){
-                if(mFftBytes[j] > highSample){
-                    highSample = mFftBytes[j];
-                }
-            }
-
-            lastIndex = index;
-            if(i > 85){
-                index = index + k + i;
-            }else{
-                index = index + k + i/30;
-
-            }
-            newbytes[i] = graund - highSample/3 ;
+            newbytes[i] = graund -  mFftBytes[i]/2 ;
 
             if (newbytes[i] > graund) {
                 newbytes[i] = graund;
@@ -73,7 +59,14 @@ class LineRenderer {
             if (x[i] < 0 ) {
                 x[i] = 0;
             }
-
+            if (i > 2 && i < 98) {
+                x[i - 1] = ((x[i] + x[i-3])/2 + (x[i]))/2;
+                x[i - 2] = ((x[i] + x[i-3])/2 + (x[i - 3]))/2;
+            }
+            if (i < column - 3) {
+                x[i + 1] = ((x[i] + x[i+3])/2 + (x[i]))/2;
+                x[i + 2] = ((x[i] + x[i+3])/2 + (x[i + 3]))/2;
+            }
             if (x[i] > graund) {
                 x[i] = graund;
             }

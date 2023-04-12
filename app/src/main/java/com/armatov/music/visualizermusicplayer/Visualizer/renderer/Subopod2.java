@@ -16,10 +16,7 @@ import java.util.Random;
 
 public class Subopod2 {
     private float[] x = new float[400];
-//    static {
-//        System.loadLibrary("myapplication");
-//    }
-public float[][] stars;
+    public float[][] stars;
 
     float magAlpha;
     native void calculateData(float[] mFftBytes,float[] x,float[] GroundWidthHeight);
@@ -30,15 +27,11 @@ public float[][] stars;
             for(int i = 0 ; i < 500; i++){
                 int xRandom = random.nextInt(rect.width()/2);
                 stars[0][i] = xRandom;
-                int xRandomW = random.nextInt(rect.width()/2);
-                stars[3][i] = xRandomW;
+                int yRandom = random.nextInt(rect.width()/2);
+                stars[3][i] = yRandom;
                 stars[1][i] = 1;
                 stars[2][i] = 0.08f;
                 stars[4][i] = 0.5f;
-                int r = random.nextInt(255);
-                int g = random.nextInt(255);
-                int b = random.nextInt(255);
-
 
             }
         }
@@ -67,20 +60,16 @@ public float[][] stars;
         // p.setStyle(Paint.Style.STROKE);
         p.setStrokeWidth(2);
         for(int i = 0 ; i < 500; i++){
-/*
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                p.setColor(Color.argb(255, starsColor[0][i], starsColor[1][i], starsColor[2][i]));
-            }else {
-                p.setColor(Color.argb(255, random.nextInt(250), random.nextInt(200), random.nextInt(250)));
 
-            }
-*/
             p.setColor(Color.WHITE);
             if(stars[0][i] > rect.centerX()){
                 int xRandom = random.nextInt(rect.width()/2);
                 stars[0][i] = xRandom;
-                stars[2][i] = 0.08f;
+                int yRandom = random.nextInt(rect.width()/2);
+                stars[3][i] = yRandom;
                 stars[1][i] = 1;
+                stars[2][i] = 0.08f;
+                stars[4][i] = 0.5f;
             }
 
             if(i < 199 && stars[0][i] == stars[0][i+1]){
@@ -116,7 +105,7 @@ public float[][] stars;
         float [] gwh = {graund, canvas.getWidth()/2, canvas.getHeight()/2};
         width = 4;
         x = getData(mFftBytes, x, gwh);
-      //  calculateData(mFftBytes, x, gwh);
+        //  calculateData(mFftBytes, x, gwh);
 
 
 
@@ -126,7 +115,7 @@ public float[][] stars;
 
 
 
-      //  p.setMaskFilter(new BlurMaskFilter(6, BlurMaskFilter.Blur.OUTER));
+        //  p.setMaskFilter(new BlurMaskFilter(6, BlurMaskFilter.Blur.OUTER));
 
 
         p.setColor(paint.getColor());
@@ -134,7 +123,7 @@ public float[][] stars;
 
 
         p.setStrokeWidth(width);
-     //   p.setShader(new BitmapShader(BarGraphRenderer.bitmapLine, Shader.TileMode.CLAMP, Shader.TileMode.MIRROR));
+        //   p.setShader(new BitmapShader(BarGraphRenderer.bitmapLine, Shader.TileMode.CLAMP, Shader.TileMode.MIRROR));
         canvas.drawLines(x, p);
 
 

@@ -258,7 +258,7 @@ public class VisualizerChangeAdapter extends RecyclerView.Adapter<VisualizerChan
 
     @Override
     public int getItemCount() {
-        return 15;
+        return 16;
     }
 
 }

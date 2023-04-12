@@ -750,6 +750,7 @@ public class CardPlayerFragment extends AbsPlayerFragment implements PlayerAlbum
         @Override
         public void animateColorChange(int newColor) {
             super.animateColorChange(newColor);
+            newColor = Color.BLACK;
 
             fragment.slidingUpPanelLayout.setBackgroundColor(fragment.lastColor);
 

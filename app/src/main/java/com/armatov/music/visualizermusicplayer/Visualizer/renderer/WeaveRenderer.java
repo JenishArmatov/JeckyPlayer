@@ -1,6 +1,5 @@
 package com.armatov.music.visualizermusicplayer.Visualizer.renderer;
 
-import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,7 +10,6 @@ import android.graphics.Rect;
 public class WeaveRenderer {
     private static float[] newbytes = new float[1024*4];
     private static float[] lastFft = new float[300];
-    private  float[][] arrayXYARGB = new float[5][300];
     private  float[] x = new float[100*4];
     Paint p;
 

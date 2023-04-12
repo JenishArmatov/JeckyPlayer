@@ -3,6 +3,7 @@ package com.armatov.music.visualizermusicplayer.Visualizer.renderer;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -48,6 +49,7 @@ public class Draw {
     private final Subopod subopod;
     private final Subopod2 subopod2;
     private final SpeakersRenderer speakersRenderer;
+    public static Bitmap bitmapSpeakers;
 
     private final SimpleLineRenderer simpleLineRenderer;
     private final Tesla tesla;
@@ -88,6 +90,7 @@ public class Draw {
         classic = new Classic();
         lineRenderer = new LineRenderer();
         this.context = context;
+        bitmapSpeakers = Bitmap.createBitmap(50,50, Bitmap.Config.ARGB_4444);
 
         setPlayerPos(context);
     }
@@ -135,6 +138,7 @@ public class Draw {
 
         switch (Player.checkedItem){
             case 0 :
+
 
                 if(stepForBluetoothLatency != latencyForBluetooth){
                     simpleLineRenderer.draw(fftHistory[stepForBluetoothLatency + 1],rect, canvas);
@@ -284,9 +288,9 @@ public class Draw {
                 REDRAW_TIME = 40;
 
                 if(stepForBluetoothLatency != latencyForBluetooth){
-                    subopod.draw(canvas, fftHistory[stepForBluetoothLatency + 1],rect,column);
+                    speakersRenderer.draw(canvas, fftHistory[stepForBluetoothLatency + 1],rect,column);
                 }else {
-                    subopod.draw(canvas, fftHistory[0], rect,column);
+                    speakersRenderer.draw(canvas, fftHistory[0], rect,column);
                 }
 
                 break;
@@ -343,6 +347,15 @@ public class Draw {
                 }
 
                 break;
+            case 15 :
+                if(stepForBluetoothLatency != latencyForBluetooth){
+                    subopod.draw(canvas, fftHistory[stepForBluetoothLatency + 1],rect,column);
+                }else {
+                    subopod.draw(canvas, fftHistory[0], rect,column);
+                }
+
+                break;
+
 
         }
 
