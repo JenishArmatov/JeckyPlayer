@@ -185,14 +185,27 @@ public class Draw {
 
 
             case 4 :
+
                 if(stepForBluetoothLatency != latencyForBluetooth){
                     classicRenderer.draw(canvas, fftHistory[stepForBluetoothLatency + 1], rect);
                 }else {
                     classicRenderer.draw(canvas, fftHistory[0],  rect);
                 }
+                break;
+
+
+            case 5 :
+                if(stepForBluetoothLatency != latencyForBluetooth){
+                    tesla.draw(canvas, fftHistory[stepForBluetoothLatency + 1],   rect);
+
+                }else {
+                    tesla.draw(canvas, fftHistory[0],   rect);
+
+                }
 
                 break;
-            case 5 :
+
+            case 6 :
                 if(stepForBluetoothLatency != latencyForBluetooth){
 
                     if(rect.height() >= rect.width()){
@@ -216,7 +229,7 @@ public class Draw {
 
 
                 break;
-            case 6 :
+            case 7 :
 
                 if(stepForBluetoothLatency != latencyForBluetooth){
                     if(rect.height() >= rect.width()){
@@ -239,7 +252,7 @@ public class Draw {
                 }
 
                 break;
-            case 7 :
+            case 8 :
 
                 if(stepForBluetoothLatency != latencyForBluetooth){
 
@@ -264,7 +277,7 @@ public class Draw {
                 }
 
                 break;
-            case 8 :
+            case 9 :
                 if(stepForBluetoothLatency != latencyForBluetooth){
                     lineRenderer.draw(canvas, fftHistory[stepForBluetoothLatency + 1], rect,column);
 
@@ -274,7 +287,7 @@ public class Draw {
                 }
 
                 break;
-            case 9 :
+            case 10 :
                 if(stepForBluetoothLatency != latencyForBluetooth){
                     cirleRenderer.draw(dataHistory[stepForBluetoothLatency + 1], rect, paint, canvas);
 
@@ -284,7 +297,7 @@ public class Draw {
                 }
 
                 break;
-            case 10 :
+            case 11 :
                 REDRAW_TIME = 40;
 
                 if(stepForBluetoothLatency != latencyForBluetooth){
@@ -294,7 +307,7 @@ public class Draw {
                 }
 
                 break;
-            case 11 :
+            case 12 :
                 if(stepForBluetoothLatency != latencyForBluetooth){
                     classic.draw(canvas,fftHistory[stepForBluetoothLatency + 1], rect);
                 }else {
@@ -302,7 +315,7 @@ public class Draw {
                 }
 
                 break;
-            case 12 :
+            case 13 :
 
                 if(stepForBluetoothLatency != latencyForBluetooth){
                     if(rect.height() >= rect.width()){
@@ -326,7 +339,7 @@ public class Draw {
 
                 break;
 
-            case 13 :
+            case 14 :
                 REDRAW_TIME = 40;
                 if(stepForBluetoothLatency != latencyForBluetooth){
                     lineRenderer2.draw(canvas, fftHistory[stepForBluetoothLatency + 1],  rect,column);
@@ -337,16 +350,7 @@ public class Draw {
                 }
 
                 break;
-            case 14 :
-                if(stepForBluetoothLatency != latencyForBluetooth){
-                    tesla.draw(canvas, fftHistory[stepForBluetoothLatency + 1],   rect);
 
-                }else {
-                    tesla.draw(canvas, fftHistory[0],   rect);
-
-                }
-
-                break;
             case 15 :
                 if(stepForBluetoothLatency != latencyForBluetooth){
                     subopod.draw(canvas, fftHistory[stepForBluetoothLatency + 1],rect,column);

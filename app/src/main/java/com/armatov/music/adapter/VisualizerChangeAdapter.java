@@ -186,7 +186,7 @@ public class VisualizerChangeAdapter extends RecyclerView.Adapter<VisualizerChan
         long realTime = getTime();
         holder.rewardedVideo.setVisibility(View.GONE);
         if (realTime > oldTime){
-            if(position > 1){
+            if(position > 5){
                 Picasso.get()
                         .load(R.drawable.watch_video_icon)
                         .resize(weight/5,height/8)
@@ -206,18 +206,16 @@ public class VisualizerChangeAdapter extends RecyclerView.Adapter<VisualizerChan
                 long realTime = getTime();
                 pos = holder.getAdapterPosition();
 
-                if(holder.getAdapterPosition() == 0 || holder.getAdapterPosition() == 1){
+                if(holder.getAdapterPosition()  < 6){
                     Player.checkedItem = holder.getAdapterPosition();
                     PreferenceUtil.getInstance(activity.getApplicationContext()).setCheckedItem(holder.getAdapterPosition());
                     activity.onBackPressed();
 
                 }
-                if(holder.getAdapterPosition() > 1){
+                if(holder.getAdapterPosition() > 5){
                     ///
-                    Player.checkedItem = holder.getAdapterPosition();
-                    activity.onBackPressed();
-                    PreferenceUtil.getInstance(activity.getApplicationContext()).setCheckedItem(holder.getAdapterPosition());
-/*
+
+
                     if (realTime > oldTime){
                         showVideo();
                     }else {
@@ -226,7 +224,7 @@ public class VisualizerChangeAdapter extends RecyclerView.Adapter<VisualizerChan
                         PreferenceUtil.getInstance(activity.getApplicationContext()).setCheckedItem(holder.getAdapterPosition());
                     }
 
- */
+
                 }
 
 
