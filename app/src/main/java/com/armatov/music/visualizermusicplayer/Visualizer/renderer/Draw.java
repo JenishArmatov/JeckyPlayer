@@ -120,7 +120,7 @@ public class Draw {
     }
     public void draw(Canvas canvas){
         if(chekBluetooth()){
-            latencyForBluetooth = 11;
+            latencyForBluetooth = 15;
 
         } else {
             latencyForBluetooth = 0;

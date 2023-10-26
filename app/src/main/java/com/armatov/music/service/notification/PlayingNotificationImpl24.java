@@ -48,14 +48,26 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
 
         Intent action = new Intent(service, MainActivity.class);
         action.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        final PendingIntent clickIntent = PendingIntent.getActivity(service, 0, action, 0);
+        PendingIntent clickIntent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            clickIntent = PendingIntent.getBroadcast(service, 0, action, PendingIntent.FLAG_IMMUTABLE);
+        }else {
+            clickIntent = PendingIntent.getBroadcast(service, 0, action, 0);
 
+        }
         final ComponentName serviceName = new ComponentName(service, MusicService.class);
         Intent intent = new Intent(MusicService.ACTION_QUIT);
         intent.setComponent(serviceName);
-        final PendingIntent deleteIntent = PendingIntent.getService(service, 0, intent, 0);
+        PendingIntent deleteIntent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            deleteIntent = PendingIntent.getBroadcast(service, 0, action, PendingIntent.FLAG_IMMUTABLE);
+        }else {
+            deleteIntent = PendingIntent.getBroadcast(service, 0, action, 0);
 
+        }
         final int bigNotificationImageSize = service.getResources().getDimensionPixelSize(R.dimen.notification_big_image_size);
+        PendingIntent finalClickIntent = clickIntent;
+        PendingIntent finalDeleteIntent = deleteIntent;
         service.runOnUiThread(() -> SongGlideRequest.Builder.from(Glide.with(service), song)
                 .checkIgnoreMediaStore(service)
                 .generatePalette(service).build()
@@ -89,8 +101,8 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(service, NOTIFICATION_CHANNEL_ID)
                                 .setSmallIcon(R.drawable.ic_notification)
                                 .setLargeIcon(bitmap)
-                                .setContentIntent(clickIntent)
-                                .setDeleteIntent(deleteIntent)
+                                .setContentIntent(finalClickIntent)
+                                .setDeleteIntent(finalDeleteIntent)
                                 .setContentTitle(song.title)
                                 .setContentText(song.artistName)
                                 .setOngoing(isPlaying)
@@ -118,6 +130,12 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
         final ComponentName serviceName = new ComponentName(service, MusicService.class);
         Intent intent = new Intent(action);
         intent.setComponent(serviceName);
-        return PendingIntent.getService(service, 0, intent, 0);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return PendingIntent.getService(service, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        }else {
+            return PendingIntent.getService(service, 0, intent, 0);
+
+        }
     }
 }
