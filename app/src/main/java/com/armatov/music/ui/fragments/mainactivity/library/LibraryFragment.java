@@ -4,6 +4,7 @@ package com.armatov.music.ui.fragments.mainactivity.library;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -251,6 +252,11 @@ public class LibraryFragment extends AbsMainActivityFragment implements CabHolde
                 return true;
             case R.id.action_search:
                 startActivity(new Intent(getActivity(), SearchActivity.class));
+                return true;
+            case R.id.action_buy:
+                Uri uri = Uri.parse("https://payhip.com/b/P9xqH"); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);

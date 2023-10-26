@@ -48,7 +48,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
         return stream = getMosaic(model.albumCovers);
     }
 
-    private InputStream getMosaic(final List<AlbumCover> albumCovers) throws FileNotFoundException {
+    private InputStream getMosaic(final List<AlbumCover> albumCovers) throws IOException {
 
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 
