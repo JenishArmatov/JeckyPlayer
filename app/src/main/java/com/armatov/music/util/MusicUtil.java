@@ -1,23 +1,30 @@
 package com.armatov.music.util;
 
+import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.armatov.music.R;
 import com.armatov.music.helper.MusicPlayerRemote;
 import com.armatov.music.loader.PlaylistLoader;
@@ -218,66 +225,117 @@ public class MusicUtil {
         }
         return albumArtDir;
     }
+    private static Uri getFilePathToMediaID(String path, Context context) {
 
-    public static void deleteSongs(@NonNull final Context context, @NonNull final List<Song> songs) {
-        final String[] projection = new String[]{
-                BaseColumns._ID, MediaStore.MediaColumns.DATA
-        };
-        final StringBuilder selection = new StringBuilder();
-        selection.append(BaseColumns._ID + " IN (");
-        for (int i = 0; i < songs.size(); i++) {
-            selection.append(songs.get(i).id);
-            if (i < songs.size() - 1) {
-                selection.append(",");
+        Uri contentUri = null;
+        ContentResolver cr = context.getContentResolver();
+
+        Uri uri = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL);
+        String selection = MediaStore.Audio.Media.DATA;
+        String[] selectionArgs = {path};
+        String[] projection = {MediaStore.Audio.Media._ID};
+
+        Cursor cursor = cr.query(uri, projection, selection + "=?", selectionArgs, null);
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int idIndex = cursor.getColumnIndex(MediaStore.Audio.Media._ID);
+                long id = Long.parseLong(cursor.getString(idIndex));
+                contentUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
             }
         }
-        selection.append(")");
 
-        int deletedCount = 0;
+        return contentUri;
 
+    }
+    private static final int REQUEST_PERM_DELETE = 444;
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private static void requestDeletePermission(Activity context, List<Uri> uri_list, List<Song> songs) {
         try {
-            final Cursor cursor = context.getContentResolver().query(
-                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection.toString(),
-                    null, null);
-            if (cursor != null) {
-                // Step 1: Remove selected songs from the current playlist, as well
-                // as from the album art cache
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    final long id = cursor.getLong(0);
-                    final Song song = SongLoader.getSong(context, id);
-                    MusicPlayerRemote.removeFromQueue(song);
-                    cursor.moveToNext();
-                }
+            PendingIntent editPendingIntent = MediaStore.createDeleteRequest(context.getContentResolver(), uri_list);
+            context.startIntentSenderForResult(editPendingIntent.getIntentSender(), REQUEST_PERM_DELETE, null, 0, 0, 0, null);
 
-                // Step 2: Remove files from card
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    final long id = cursor.getLong(0);
-                    final String name = cursor.getString(1);
-                    try { // File.delete can throw a security exception
-                        final File f = new File(name);
-                        if (f.delete()) {
-                            // Step 3: Remove selected track from the database
-                            context.getContentResolver().delete(ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id),null, null);
-                            deletedCount++;
-                        } else {
-                            // I'm not sure if we'd ever get here (deletion would
-                            // have to fail, but no exception thrown)
-                            Log.e("MusicUtils", "Failed to delete file " + name);
-                        }
+        } catch (IntentSender.SendIntentException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void deleteSongs(@NonNull final Activity context, @NonNull final List<Song> songs) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            List<Uri> uri_list = new ArrayList<>();
+            for(int i = 0; i < songs.size(); i++){
+                File my_single_file = new File(songs.get(i).data);
+                MusicPlayerRemote.removeFromQueue(songs.get(i));
 
-                        cursor.moveToNext();
-                    } catch (@NonNull final SecurityException ex) {
-                        cursor.moveToNext();
-                    } catch (NullPointerException e) {
-                        Log.e("MusicUtils", "Failed to find file " + name);
-                    }
+                if (my_single_file.exists()) {
+                    Uri Uri_one = getFilePathToMediaID(my_single_file.getPath(), context);
+                    uri_list.add(Uri_one);
                 }
-                cursor.close();
             }
-      		Toast.makeText(context, context.getResources().getQuantityString(R.plurals.deleted_x_songs, deletedCount, deletedCount), Toast.LENGTH_SHORT).show();
-        } catch (SecurityException ignored) {
+            requestDeletePermission(context, uri_list, songs);
+
+        }else {
+
+            final String[] projection = new String[]{
+                    BaseColumns._ID, MediaStore.MediaColumns.DATA
+            };
+            final StringBuilder selection = new StringBuilder();
+            selection.append(BaseColumns._ID + " IN (");
+            for (int i = 0; i < songs.size(); i++) {
+                selection.append(songs.get(i).id);
+                if (i < songs.size() - 1) {
+                    selection.append(",");
+                }
+            }
+            selection.append(")");
+
+            int deletedCount = 0;
+
+            try {
+                final Cursor cursor = context.getContentResolver().query(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection.toString(),
+                        null, null);
+                if (cursor != null) {
+                    // Step 1: Remove selected songs from the current playlist, as well
+                    // as from the album art cache
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        final long id = cursor.getLong(0);
+                        final Song song = SongLoader.getSong(context, id);
+                        MusicPlayerRemote.removeFromQueue(song);
+                        cursor.moveToNext();
+                    }
+
+                    // Step 2: Remove files from card
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        final long id = cursor.getLong(0);
+                        final String name = cursor.getString(1);
+                        try { // File.delete can throw a security exception
+                            final File f = new File(name);
+                            if (f.delete()) {
+                                // Step 3: Remove selected track from the database
+                                context.getContentResolver().delete(ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id),null, null);
+                                deletedCount++;
+                            } else {
+                                // I'm not sure if we'd ever get here (deletion would
+                                // have to fail, but no exception thrown)
+                                Log.e("MusicUtils", "Failed to delete file " + name);
+                            }
+
+                            cursor.moveToNext();
+                        } catch (@NonNull final SecurityException ex) {
+                            cursor.moveToNext();
+                        } catch (NullPointerException e) {
+                            Log.e("MusicUtils", "Failed to find file " + name);
+                        }
+                    }
+                    cursor.close();
+                }
+                //	Toast.makeText(context, context.getResources().getQuantityString(R.plurals.deleted_x_songs, deletedCount, deletedCount), Toast.LENGTH_SHORT).show();
+            } catch (SecurityException ignored) {
+            }
+
         }
     }
 
