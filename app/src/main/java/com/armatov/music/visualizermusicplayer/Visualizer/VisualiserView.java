@@ -35,7 +35,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class VisualiserView extends View {
     private static final String TAG = "VisualiserView";
     private Context context;
-    private static Draw draw;
+    private Draw draw;
 
 
     public VisualiserView(Context context, AttributeSet attrs, int defStyle)

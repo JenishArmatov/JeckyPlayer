@@ -39,6 +39,11 @@
         android:orderInCategory="1"
         android:title="@string/action_sleep_timer"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_bluetooth_latency"
+        android:orderInCategory="1"
+        android:title="@string/action_bluetooth_latency"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_equalizer"
