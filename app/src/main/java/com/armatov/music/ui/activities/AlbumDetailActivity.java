@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialcab.MaterialCab;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.util.DialogUtils;
+import com.armatov.music.dialogs.BluetoothLatencyDialog;
 import com.bumptech.glide.Glide;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
@@ -298,6 +299,9 @@ public class AlbumDetailActivity extends AbsSlidingMusicPanelActivity implements
         switch (id) {
             case R.id.action_sleep_timer:
                 new SleepTimerDialog().show(getSupportFragmentManager(), "SET_SLEEP_TIMER");
+                return true;
+            case R.id.action_bluetooth_latency:
+                new BluetoothLatencyDialog().show(getSupportFragmentManager(), "SET_BLUETOOTH_LATENCY");
                 return true;
             case R.id.action_equalizer:
                 NavigationUtil.openEqualizer(this);

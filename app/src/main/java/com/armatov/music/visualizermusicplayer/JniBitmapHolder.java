@@ -61,8 +61,6 @@ public class JniBitmapHolder
     public void cropBitmap(final int left,final int top,final int right,final int bottom)
     {
         if(_handler==null){
-            Log.d("cropBitmap", "nulllllllllll");
-
             return;
         }
 

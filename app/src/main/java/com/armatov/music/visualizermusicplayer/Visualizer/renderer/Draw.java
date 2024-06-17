@@ -91,7 +91,13 @@ public class Draw {
         lineRenderer = new LineRenderer();
         this.context = context;
         bitmapSpeakers = Bitmap.createBitmap(50,50, Bitmap.Config.ARGB_4444);
+        if(chekBluetooth()){
+            latencyForBluetooth = 15;
 
+        } else {
+            latencyForBluetooth = 0;
+
+        }
         setPlayerPos(context);
     }
     private void setPlayerPos(Context context){
@@ -119,13 +125,7 @@ public class Draw {
         }
     }
     public void draw(Canvas canvas){
-        if(chekBluetooth()){
-            latencyForBluetooth = 15;
 
-        } else {
-            latencyForBluetooth = 0;
-
-        }
         System.arraycopy(MultiPlayer.data,0,data, 0, MultiPlayer.data.length/2);
         calculateFft();
         fftHistory[stepForBluetoothLatency] = fft.clone();

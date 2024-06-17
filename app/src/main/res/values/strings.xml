@@ -316,4 +316,5 @@
     <string name="watch_video">Watch video</string>
     <string name="armatov_jenishbek">Jeck_Armat</string>
     <string name="change_equalizer">Change equalizer</string>
+    <string name="action_bluetooth_latency">Bluetooth latency</string>
 </resources>

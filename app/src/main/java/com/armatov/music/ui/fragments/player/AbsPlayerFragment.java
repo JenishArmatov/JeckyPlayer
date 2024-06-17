@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.armatov.music.R;
 import com.armatov.music.dialogs.AddToPlaylistDialog;
+import com.armatov.music.dialogs.BluetoothLatencyDialog;
 import com.armatov.music.dialogs.CreatePlaylistDialog;
 import com.armatov.music.dialogs.SleepTimerDialog;
 import com.armatov.music.dialogs.SongDetailDialog;
@@ -61,6 +62,9 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
                 return true;
             case R.id.action_sleep_timer:
                 new SleepTimerDialog().show(getFragmentManager(), "SET_SLEEP_TIMER");
+                return true;
+            case R.id.action_bluetooth_latency:
+                new BluetoothLatencyDialog().show(getFragmentManager(), "SET_BLUETOOTH_LATENCY");
                 return true;
             case R.id.action_toggle_favorite:
                 toggleFavorite(song);

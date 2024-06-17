@@ -14,8 +14,9 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        app = this;
-
+        if (app == null){
+            app = this;
+        }
         // default theme
         if (!ThemeStore.isConfigured(this, 1)) {
             ThemeStore.editTheme(this)
@@ -31,6 +32,7 @@ public class App extends Application {
     }
 
     public static App getInstance() {
+
         return app;
     }
 }

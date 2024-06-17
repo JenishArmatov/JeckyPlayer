@@ -40,17 +40,9 @@ public class Subopod {
         final Bitmap output = Bitmap.createBitmap(rect.width(),rect.height(), Bitmap.Config.ARGB_4444);
 
         final int w = rect.width(), height = rect.height();
-// store the bitmap in the JNI "world"
         final JniBitmapHolder bitmapHolder = new JniBitmapHolder();
-// no need for the bitmap on the java "world", since the operations are done on the JNI "world"
-   //     b.recycle();
 
-
-// crop a center square from the bitmap, from (0.25,0.25) to (0.75,0.75) of the bitmap.
         bitmapHolder.cropBitmap(b,output);
-//rotate the bitmap:
-//get the output java bitmap , and free the one on the JNI "world"
-      //  b=bitmapHolder.getBitmapAndFree();
 
 
         float[] newbytes = new float[column];
