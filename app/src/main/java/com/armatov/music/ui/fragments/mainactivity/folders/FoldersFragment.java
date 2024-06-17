@@ -296,11 +296,7 @@ public class FoldersFragment extends AbsMainActivityFragment implements MainActi
             case R.id.action_search:
                 startActivity(new Intent(getActivity(), SearchActivity.class));
                 return true;
-            case R.id.action_buy:
-                Uri uri = Uri.parse("https://payhip.com/b/P9xqH");
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }

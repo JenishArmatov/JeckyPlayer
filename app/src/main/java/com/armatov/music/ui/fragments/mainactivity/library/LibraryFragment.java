@@ -253,11 +253,6 @@ public class LibraryFragment extends AbsMainActivityFragment implements CabHolde
             case R.id.action_search:
                 startActivity(new Intent(getActivity(), SearchActivity.class));
                 return true;
-            case R.id.action_buy:
-                Uri uri = Uri.parse("https://payhip.com/b/P9xqH"); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
