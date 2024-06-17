@@ -57,7 +57,7 @@ public class Draw {
     private final Classic classic;
     public static int column = 100;
     public int stepForBluetoothLatency = 1;
-    private int latencyForBluetooth;
+    public static int latencyForBluetooth;
     private float[] fft = new float[1024*4];
     private Context context;
 
