@@ -64,7 +64,7 @@ public class SleepTimerDialog extends DialogFragment {
 
                     final int minutes = seekArcProgress;
 
-                    PendingIntent pi = makeTimerPendingIntent(PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent pi = makeTimerPendingIntent(PendingIntent.FLAG_IMMUTABLE);
 
                     final long nextSleepTimerElapsedTime = SystemClock.elapsedRealtime() + minutes * 60 * 1000;
                     PreferenceUtil.getInstance(getActivity()).setNextSleepTimerElapsedRealtime(nextSleepTimerElapsedTime);
@@ -77,7 +77,7 @@ public class SleepTimerDialog extends DialogFragment {
                     if (getActivity() == null) {
                         return;
                     }
-                    final PendingIntent previous = makeTimerPendingIntent(PendingIntent.FLAG_NO_CREATE);
+                    final PendingIntent previous = makeTimerPendingIntent(PendingIntent.FLAG_IMMUTABLE);
                     if (previous != null) {
                         AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
                         am.cancel(previous);

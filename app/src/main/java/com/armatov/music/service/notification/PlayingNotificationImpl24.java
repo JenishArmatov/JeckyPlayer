@@ -52,7 +52,7 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             clickIntent = PendingIntent.getBroadcast(service, 0, action, PendingIntent.FLAG_IMMUTABLE);
         }else {
-            clickIntent = PendingIntent.getBroadcast(service, 0, action, 0);
+            clickIntent = PendingIntent.getBroadcast(service, 0, action, PendingIntent.FLAG_IMMUTABLE);
 
         }
         final ComponentName serviceName = new ComponentName(service, MusicService.class);
@@ -62,7 +62,7 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             deleteIntent = PendingIntent.getBroadcast(service, 0, action, PendingIntent.FLAG_IMMUTABLE);
         }else {
-            deleteIntent = PendingIntent.getBroadcast(service, 0, action, 0);
+            deleteIntent = PendingIntent.getBroadcast(service, 0, action, PendingIntent.FLAG_IMMUTABLE);
 
         }
         final int bigNotificationImageSize = service.getResources().getDimensionPixelSize(R.dimen.notification_big_image_size);
@@ -134,7 +134,7 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return PendingIntent.getService(service, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         }else {
-            return PendingIntent.getService(service, 0, intent, 0);
+            return PendingIntent.getService(service, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         }
     }
