@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/action_equalizers"
+        android:title="@string/change_equalizer"
+        android:orderInCategory="99"
+
+        app:showAsAction="never">
+
+    </item>
+
+
+
+</menu>
