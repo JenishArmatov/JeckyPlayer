@@ -20,6 +20,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.armatov.music.R;
+import com.armatov.music.service.MultiPlayer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Util {
     public static int checkedItem = 0;
@@ -85,6 +89,49 @@ public class Util {
             Configuration config = context.getResources().getConfiguration();
             return config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
         } else return false;
+    }
+
+    public static List<float[]> calculateFft(float[]data, float[]fft) {
+        List<float[]> result = new ArrayList<>();
+        float[] lastFFt = new float[1024 * 4];
+
+        System.arraycopy(MultiPlayer.data, 0, data, 0, MultiPlayer.data.length / 2);
+        System.arraycopy(MultiPlayer.lastFFt, 0, lastFFt, 0, MultiPlayer.lastFFt.length / 2);
+
+        int lenth = lastFFt.length / 2;
+
+        for (int i = 0; i < lenth - 5; i++) {
+            float div = (lenth / 2) - i * 2;
+            div = div > 20 ? (int) (div) : 20;
+            float w = lastFFt[i * 2] * lastFFt[i * 2];
+            float q = ((lastFFt[i * 2 + 1] * lastFFt[i * 2 + 1]));
+            float res = (w + q) / div;
+            res = res > 0 ? (int) (60 * Math.log10(res * res)) : 0;
+            for (int f = 0; f <= 5; f++) {
+                if (i <= 5) {
+                    fft[f] = 1;
+                }
+            }
+            for (int f = 0; f < 8; f++) {
+                if ((i > 7) && (fft[i - f] > fft[(i - f) - 1])) {
+                    fft[(i - f) - 1] = fft[(i - f)] - fft[(i - f)] / 5;
+                }
+            }
+
+            fft[i + 5] = res;
+
+        }
+        for (int f = 0; f < 1000; f++) {
+            for (int i = 0; i < 8; i++) {
+                if (fft[f] > fft[f + 1]) {
+                    fft[f + 1] = fft[f] - fft[(f)] / 5;
+                }
+            }
+        }
+        result.add(data);
+        result.add(fft);
+        return result;
+
     }
 
 }

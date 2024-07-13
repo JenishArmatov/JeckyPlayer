@@ -1,7 +1,11 @@
 package com.armatov.music.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class CalendarUtil {
     private static final long MS_PER_MINUTE = 60 * 1000;
@@ -111,7 +115,14 @@ public class CalendarUtil {
 
         return elapsed;
     }
-
+    public String getDate(){
+        Date currentDate = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyMMdd", Locale.getDefault());
+        String dateText = dateFormat.format(currentDate);
+        DateFormat timeFormat = new SimpleDateFormat("HHmmss", Locale.getDefault());
+        String timeText = dateText + timeFormat.format(currentDate);
+        return timeText;
+    }
     /**
      * Gets the number of days for the given month in the given year.
      *
@@ -123,4 +134,5 @@ public class CalendarUtil {
         final Calendar monthCal = new GregorianCalendar(calendar.get(Calendar.YEAR), month, 1);
         return monthCal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
+
 }

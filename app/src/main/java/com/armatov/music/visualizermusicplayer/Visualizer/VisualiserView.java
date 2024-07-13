@@ -49,7 +49,7 @@ public class VisualiserView extends View {
 
     public void init() {
         if(draw == null){
-            draw = new Draw(context);
+            draw = new Draw();
         }
 
     }
