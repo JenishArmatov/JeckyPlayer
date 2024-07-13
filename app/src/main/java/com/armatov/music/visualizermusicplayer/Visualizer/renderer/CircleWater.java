@@ -7,9 +7,11 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Build;
 
+import com.armatov.music.visualizermusicplayer.Visualizer.renderer.interfaces.Renderer;
+
 import java.util.Random;
 
-public class CircleWater {
+public class CircleWater implements Renderer {
     private float newbytes[] = new float[1024];
     private float[][] arrayXYARGB = new float[3][200];
     private float magAlpha = 0;
@@ -17,8 +19,22 @@ public class CircleWater {
     private float[][] starsColor = new float[3][500];
     private  float[] x = new float[1024*4];
 
-    public void draw(Canvas canvas, float[] mFftBytes,
-                     Rect rect) {
+    private float[] toPolar(float[] cartesian, Rect rect) {
+        double cX = rect.width() / 2;
+        double cY = rect.height() / 2;
+        double angle = (cartesian[0]) * 2 * Math.PI;
+        double radius = (cartesian[1] / 2);
+        float[] out = {
+                (float) (cX - radius * Math.sin(angle)),
+                (float) (cY - radius * Math.cos(angle))
+        };
+        return out;
+    }
+
+
+    @Override
+    public void draw(Canvas canvas, float[] mFftBytes, float[] data)  {
+        Rect rect = new Rect(0,0,canvas.getWidth(),canvas.getHeight());
         Random random = new Random();
         if(stars == null){
             stars = new float[5][500];
@@ -28,12 +44,11 @@ public class CircleWater {
 
         canvas.drawColor(Color.argb(255,0,0,0));
         float width = (canvas.getWidth() + canvas.getHeight())/100;
-        int graund = (int) ((canvas.getHeight() / 2));
+        int graund =  ((canvas.getHeight() / 2));
         float xStart = 20f;
 
         Paint p = new Paint();
         p.setStrokeWidth(width);
-   //     p.setStyle(Paint.Style.FILL_AND_STROKE);
 
         int red = 250;
         int green = 0;
@@ -50,7 +65,7 @@ public class CircleWater {
         }
 
         p.setColor(Color.WHITE);
-       // p.setStyle(Paint.Style.STROKE);
+        // p.setStyle(Paint.Style.STROKE);
         p.setStrokeWidth(2);
         for(int i = 0 ; i < 300; i++){
 
@@ -171,7 +186,7 @@ public class CircleWater {
             float[] polarPoint1 = toPolar(cartPoint1, new Rect(0,0,canvas.getWidth(),canvas.getHeight()));
 
 
-            
+
             canvas.drawLine(canvas.getWidth()/2, canvas.getHeight()/2, polarPoint[0], polarPoint[1], p);
             p.setColor(Color.argb(255, red, green, blue));
             canvas.drawCircle(polarPoint[0], polarPoint[1],width/2,p);
@@ -205,7 +220,7 @@ public class CircleWater {
                 canvas.drawLine(polarPoint[0], polarPoint[1],
                         polarPoint2[0], polarPoint2[1],p);
             }
-          //  xStart = xStart + width;
+            //  xStart = xStart + width;
 
 
         }
@@ -220,20 +235,4 @@ public class CircleWater {
                 rect.height() / 7 - (rect.height() / 10) + db/50, p);
 
     }
-
-
-
-    private float[] toPolar(float[] cartesian, Rect rect) {
-        double cX = rect.width() / 2;
-        double cY = rect.height() / 2;
-        double angle = (cartesian[0]) * 2 * Math.PI;
-        double radius = (cartesian[1] / 2);
-        float[] out = {
-                (float) (cX - radius * Math.sin(angle)),
-                (float) (cY - radius * Math.cos(angle))
-        };
-        return out;
-    }
-
-
 }

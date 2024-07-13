@@ -1,4 +1,4 @@
-package com.armatov.music.visualizermusicplayer;
+package com.armatov.music.ui.activities;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -14,13 +14,12 @@ import com.armatov.music.util.PreferenceUtil;
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.armatov.music.R;
 import com.armatov.music.adapter.VisualizerChangeAdapter;
-import com.armatov.music.ui.activities.base.AbsBaseActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ChangeVisualization extends AbsMusicServiceActivity {
+public class ChangeVisualizationActivity extends AbsMusicServiceActivity {
     private Unbinder unbinder;
 
     @BindView(R.id.visualizer_recycler_view)

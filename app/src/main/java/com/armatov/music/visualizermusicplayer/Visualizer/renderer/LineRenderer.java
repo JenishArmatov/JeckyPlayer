@@ -6,14 +6,20 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import com.armatov.music.visualizermusicplayer.Visualizer.renderer.interfaces.Renderer;
 
-class LineRenderer {
+
+public class LineRenderer implements Renderer {
     private Bitmap bitmapLine;
     public float stepForLineRenderer = 1;
     public boolean flag = false;
     private  float[] x = new float[1024*4];
 
-    public void draw(Canvas canvas, float[] mFftBytes, Rect rect, int column) {
+    @Override
+    public void draw(Canvas canvas, float[] mFftBytes, float[] data)  {
+        int column = 100;
+        Rect rect = new Rect(0,0,canvas.getWidth(),canvas.getHeight());
+
         int speedH = rect.height()/120;
         int speedW = rect.width()/90;
         float[] newbytes = new float[column];
@@ -140,7 +146,7 @@ class LineRenderer {
         }
         p.setAlpha(255);
         canvas.drawBitmap(bitmapLine,new Rect(0,0, (int) (rect.width()/2
-                         ),
+        ),
                 rect.height()/2),new Rect(rect),p);
         try {
             bitmapLine = Bitmap.createBitmap(bitmapLine,speedW - (int)stepForLineRenderer,0,
@@ -164,7 +170,5 @@ class LineRenderer {
         }
 
     }
-
-
 }
 

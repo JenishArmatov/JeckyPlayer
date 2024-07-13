@@ -147,7 +147,7 @@
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".visualizermusicplayer.ChangeVisualization"
+            android:name=".ui.activities.ChangeVisualizationActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity

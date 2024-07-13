@@ -8,8 +8,9 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 import com.armatov.music.visualizermusicplayer.JniBitmapHolder;
+import com.armatov.music.visualizermusicplayer.Visualizer.renderer.interfaces.Renderer;
 
-public class SpeakersRenderer {
+public class SpeakersRenderer implements Renderer {
     private int red = 250;
     private int green = 0;
     private int blue = 0;
@@ -19,7 +20,32 @@ public class SpeakersRenderer {
     private Matrix matrix;
 
 
-    public void draw(Canvas canvas, float[] mFftBytes,  Rect rect, int column) {
+
+    private void calcolateColor(int i){
+        if(i < 26 && i > 0){
+            green = i * 10;
+        }
+        if(i > 25 && i < 51){
+            red = red - 10;
+
+        }
+        if(i > 50 && i < 76){
+            blue = blue + 10;
+            green = green - 5;
+            red = red + 1;
+
+        }
+        if(i > 75 && i < 99){
+            green = green - 5;
+            red = red + 3;
+            blue= blue - 2;
+        }
+    }
+
+    @Override
+    public void draw(Canvas canvas, float[] mFftBytes, float[] data){
+        Rect rect = new Rect(0,0,canvas.getWidth(),canvas.getHeight());
+        int column = 100;
         if (matrix == null){
             b = Bitmap.createBitmap(canvas.getWidth(),canvas.getHeight(), Bitmap.Config.ARGB_8888);
             matrix = new Matrix();
@@ -50,7 +76,7 @@ public class SpeakersRenderer {
         Canvas canvas1 = new Canvas(b);
         matrix.reset();
         matrix.setRotate(180,rect.width()/2, rect.height()/2);
-       // matrix.postTranslate(0,rect.height()/2);
+        // matrix.postTranslate(0,rect.height()/2);
         canvas1.setMatrix(matrix);
 
         for(int i = 0; i < column; i++) {
@@ -119,26 +145,6 @@ public class SpeakersRenderer {
         canvas.drawBitmap(b,0,0,p);
 
 
-    }
-    private void calcolateColor(int i){
-        if(i < 26 && i > 0){
-            green = i * 10;
-        }
-        if(i > 25 && i < 51){
-            red = red - 10;
-
-        }
-        if(i > 50 && i < 76){
-            blue = blue + 10;
-            green = green - 5;
-            red = red + 1;
-
-        }
-        if(i > 75 && i < 99){
-            green = green - 5;
-            red = red + 3;
-            blue= blue - 2;
-        }
     }
 
 

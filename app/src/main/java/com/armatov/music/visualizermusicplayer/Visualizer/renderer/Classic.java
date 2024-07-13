@@ -5,9 +5,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import com.armatov.music.visualizermusicplayer.Visualizer.renderer.interfaces.Renderer;
+
 import java.util.Random;
 
-public class Classic {
+public class Classic implements Renderer {
     private  float[] newbytes = new float[1024*4];
     private  float[][] arrayXYARGB = new float[3][100];
     private  float[] gravity = new float[100];
@@ -22,9 +24,32 @@ public class Classic {
     private  float[] x = new float[1024*4];
 
 
-    public  void draw(Canvas canvas, float[] mFftBytes,
-                     Rect rect) {
-        this.rect = rect;
+    public static void initStars(){
+        if(stars == null){
+            stars = new float[2][200];
+            for(int i = 0 ; i < 200; i++){
+                if (i < 100) {
+                    int xRandom = random.nextInt(rect.width());
+                    stars[0][i] = xRandom;
+                    int xRandomW = random.nextInt(rect.height() / 2 - rect.height() / 3);
+                    stars[1][i] = xRandomW;
+                    lastFft[i] = 0;
+                }else {
+                    int xRandom = random.nextInt(rect.width());
+                    stars[0][i] = xRandom;
+                    int xRandomW = random.nextInt(rect.height() / 2 - rect.height() / 8);
+                    stars[1][i] = xRandomW;
+                }
+
+
+            }
+        }
+    }
+
+    @Override
+    public void draw(Canvas canvas, float[] mFftBytes, float[] data) {
+        rect = new Rect(0,0,canvas.getWidth(),canvas.getHeight());
+
         initStars();
 
 
@@ -151,13 +176,13 @@ public class Classic {
             paintLine.setStrokeWidth(magAlpha/2);
 
             circleSize = (canvas.getHeight() + canvas.getWidth())/30 + i*4;
-       //     canvas.drawLine(10, graund,
-        //            canvas.getWidth() - 10, graund , paintLine);
+            //     canvas.drawLine(10, graund,
+            //            canvas.getWidth() - 10, graund , paintLine);
             paintLine.setAlpha((int) (magAlpha = (magAlpha) < 250 ? (int) magAlpha : 250)/2);
             paintLine.setStrokeWidth(i * 15);
             canvas.drawCircle(canvas.getWidth()/2 + canvas .getWidth()/4, canvas.getHeight()/2 - canvas.getHeight() / 6,
                     circleSize, paintLine);
-          //  canvas.drawLine(10, graund - canvas.getHeight() / 7,
+            //  canvas.drawLine(10, graund - canvas.getHeight() / 7,
             //        canvas.getWidth() - 10, graund - canvas.getHeight() / 7, paintLine);
 
 
@@ -211,26 +236,4 @@ public class Classic {
 
 
     }
-    public static void initStars(){
-        if(stars == null){
-            stars = new float[2][200];
-            for(int i = 0 ; i < 200; i++){
-                if (i < 100) {
-                    int xRandom = random.nextInt(rect.width());
-                    stars[0][i] = xRandom;
-                    int xRandomW = random.nextInt(rect.height() / 2 - rect.height() / 3);
-                    stars[1][i] = xRandomW;
-                    lastFft[i] = 0;
-                }else {
-                    int xRandom = random.nextInt(rect.width());
-                    stars[0][i] = xRandom;
-                    int xRandomW = random.nextInt(rect.height() / 2 - rect.height() / 8);
-                    stars[1][i] = xRandomW;
-                }
-
-
-            }
-        }
-    }
-
 }

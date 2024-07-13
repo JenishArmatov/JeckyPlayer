@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.armatov.music.util.PreferenceUtil;
@@ -28,7 +27,6 @@ import com.h6ah4i.android.media.opensl.OpenSLMediaPlayerFactory;
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.armatov.music.R;
 import com.armatov.music.service.MultiPlayer;
-import com.armatov.music.ui.activities.base.AbsBaseActivity;
 
 
 import me.tankery.lib.circularseekbar.CircularSeekBar;

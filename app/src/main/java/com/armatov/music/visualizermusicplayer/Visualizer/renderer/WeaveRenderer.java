@@ -7,7 +7,9 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 
-public class WeaveRenderer {
+import com.armatov.music.visualizermusicplayer.Visualizer.renderer.interfaces.Renderer;
+
+public class WeaveRenderer implements Renderer {
     private static float[] newbytes = new float[1024*4];
     private static float[] lastFft = new float[300];
     private  float[] x = new float[100*4];
@@ -15,9 +17,9 @@ public class WeaveRenderer {
 
     private int step = 0;
 
-
-    public void draw(Canvas canvas, float[] mFftBytes,
-                            Rect rect) {
+    @Override
+    public void draw(Canvas canvas, float[] mFftBytes, float[] data)  {
+        Rect rect = new Rect(0,0,canvas.getWidth(),canvas.getHeight());
 
 
         canvas.drawColor(Color.argb(255,0,0,0));
@@ -226,7 +228,7 @@ public class WeaveRenderer {
             if(i > 220){
                 green = green - 1;
                 red = red + 1;
-               // blue = blue - 1;
+                // blue = blue - 1;
             }
 
 
@@ -287,7 +289,6 @@ public class WeaveRenderer {
         }
 
     }
-
 }
 
 

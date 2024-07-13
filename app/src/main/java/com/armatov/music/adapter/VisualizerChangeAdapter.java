@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.armatov.music.util.PreferenceUtil;
+import com.armatov.music.util.Util;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
@@ -29,7 +30,6 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.armatov.music.R;
 
 import com.armatov.music.ui.activities.MainActivity;
-import com.armatov.music.visualizermusicplayer.Visualizer.Player;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -50,11 +50,10 @@ public class VisualizerChangeAdapter extends RecyclerView.Adapter<VisualizerChan
         this.activity = activity;
 
 
-
     }
 
 
-    private void showVideo(){
+    private void showVideo() {
         if (MainActivity.mRewardedAd != null) {
             MainActivity.mRewardedAd.show(activity, new OnUserEarnedRewardListener() {
                 @Override
@@ -64,7 +63,7 @@ public class VisualizerChangeAdapter extends RecyclerView.Adapter<VisualizerChan
                     long time = getTime();
                     PreferenceUtil.getInstance(activity.getApplicationContext()).setTimeOfWatchVideo(time, pos);
                     PreferenceUtil.getInstance(activity.getApplicationContext()).setCheckedItem(pos);
-                    Player.checkedItem = pos;
+                    Util.checkedItem = pos;
                     activity.onBackPressed();
                 }
             });
@@ -91,7 +90,7 @@ public class VisualizerChangeAdapter extends RecyclerView.Adapter<VisualizerChan
 
     }
 
-    public void loadAd(){
+    public void loadAd() {
         AdRequest adRequest = new AdRequest.Builder().build();
         RewardedAd.load(activity.getApplicationContext(), "ca-app-pub-3760122179679469/5883570196",
                 adRequest, new RewardedAdLoadCallback() {
@@ -114,7 +113,7 @@ public class VisualizerChangeAdapter extends RecyclerView.Adapter<VisualizerChan
                         Log.d("TAG", "Ad was loaded.");
                     }
                 });
-        if(MainActivity.mRewardedAd != null){
+        if (MainActivity.mRewardedAd != null) {
             MainActivity.mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
                 @Override
                 public void onAdShowedFullScreenContent() {
@@ -155,11 +154,12 @@ public class VisualizerChangeAdapter extends RecyclerView.Adapter<VisualizerChan
         int weight = displayMetrics.widthPixels;
 
 
-        view.setLayoutParams(new ViewGroup.LayoutParams(weight,height / 3));
+        view.setLayoutParams(new ViewGroup.LayoutParams(weight, height / 3));
 
         return new ViewHolder(view);
     }
-    private long getTime(){
+
+    private long getTime() {
         Date currentDate = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyMMdd", Locale.getDefault());
         String dateText = dateFormat.format(currentDate);
@@ -180,25 +180,23 @@ public class VisualizerChangeAdapter extends RecyclerView.Adapter<VisualizerChan
         int weight = displayMetrics.widthPixels;
         Picasso.get()
                 .load(resIDBitmap)
-                .resize(weight,height/3)
+                .resize(weight, height / 3)
                 .into(holder.imageView);
         long oldTime = PreferenceUtil.getInstance(activity.getApplicationContext()).getTimeOfWatchVideo(holder.getAdapterPosition()) + 1000000;
         long realTime = getTime();
         holder.rewardedVideo.setVisibility(View.GONE);
-        if (realTime > oldTime){
-            if(position > 5){
+        if (realTime > oldTime) {
+            if (position > 5) {
                 Picasso.get()
                         .load(R.drawable.watch_video_icon)
-                        .resize(weight/5,height/8)
+                        .resize(weight / 5, height / 8)
                         .into(holder.rewardedVideo);
                 holder.rewardedVideo.setVisibility(View.VISIBLE);
 
-                Log.d("///d","" + position);
             }
 
         }
 
-        //      canvas.drawBitmap(BarGraphRenderer.bitmapGalaxy,100,100,new Paint());
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -207,26 +205,23 @@ public class VisualizerChangeAdapter extends RecyclerView.Adapter<VisualizerChan
                 pos = holder.getAdapterPosition();
 
                 if(holder.getAdapterPosition()  < 6){
-                    Player.checkedItem = holder.getAdapterPosition();
+                    Util.checkedItem = holder.getAdapterPosition();
                     PreferenceUtil.getInstance(activity.getApplicationContext()).setCheckedItem(holder.getAdapterPosition());
                     activity.onBackPressed();
 
                 }
                 if(holder.getAdapterPosition() > 5){
-                    ///
-
 
                     if (realTime > oldTime){
                         showVideo();
                     }else {
-                        Player.checkedItem = holder.getAdapterPosition();
+                        Util.checkedItem = holder.getAdapterPosition();
                         activity.onBackPressed();
                         PreferenceUtil.getInstance(activity.getApplicationContext()).setCheckedItem(holder.getAdapterPosition());
                     }
 
 
                 }
-
 
 
                 // Log.d("D///","onClick" +  holder.getAdapterPosition());
@@ -238,20 +233,18 @@ public class VisualizerChangeAdapter extends RecyclerView.Adapter<VisualizerChan
     }
 
 
-
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imageView;
         public ImageView rewardedVideo;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            imageView =  itemView.findViewById(R.id.image_view);
-            rewardedVideo =  itemView.findViewById(R.id.video);
+            imageView = itemView.findViewById(R.id.image_view);
+            rewardedVideo = itemView.findViewById(R.id.video);
 
         }
     }
-
 
 
     @Override

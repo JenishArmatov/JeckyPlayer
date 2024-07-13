@@ -6,15 +6,35 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-public class Planet {
+import com.armatov.music.visualizermusicplayer.Visualizer.renderer.interfaces.Renderer;
+
+public class Planet implements Renderer {
 
     private float[] newbytes = new float[1024];
     private  float[] x = new float[1024*4];
+    private Paint paint;
 
 //    private float[][] stars;
 
-    public void draw(Canvas canvas, float[] mFftBytes,
-                     Rect rect, Paint paint) {
+
+
+    private float[] toPolar(float[] cartesian, Rect rect) {
+        double cX = rect.width() / 2;
+        double cY = rect.height() / 2;
+        double angle = (cartesian[0]) * 2 * Math.PI;
+        double radius = (cartesian[1] / 2);
+        float[] out = {
+                (float) (cX - radius * Math.sin(angle)),
+                (float) (cY - radius * Math.cos(angle))
+        };
+        return out;
+    }
+
+
+    @Override
+    public void draw(Canvas canvas, float[] mFftBytes, float[] data)  {
+        Rect rect = new Rect(0,0,canvas.getWidth(),canvas.getHeight());
+        initColorChange();
 
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(10);
@@ -134,8 +154,8 @@ public class Planet {
         }
 
         paint.setStyle(Paint.Style.FILL);
-    //    canvas.drawCircle(canvas.getWidth() / 2, canvas.getHeight() / 2,
-     //           rect.height() / 7 - (rect.height() / 36), paint);
+        //    canvas.drawCircle(canvas.getWidth() / 2, canvas.getHeight() / 2,
+        //           rect.height() / 7 - (rect.height() / 36), paint);
         p.setColor(Color.BLACK);
         p.setStyle(Paint.Style.FILL);
 
@@ -148,21 +168,39 @@ public class Planet {
         canvas.drawCircle(canvas.getWidth() / 2, canvas.getHeight() / 2,
                 rect.height() / 7 - (rect.height() / 12) + magAlpha/2, p);
     }
+    private int red = 250;
+    private int green = 0;
+    private int blue = 0;
+    private int i = 0;
+    private void initColorChange() {
+        paint = new Paint();
 
+        paint.setARGB(255, red,green,blue);
+        if(i < 26 && i > 0){
+            red = 250;
+            green = i * 10;
+            blue = 0;
+        }
+        if(i > 25 && i < 51){
+            red = 250 - ((i - 25)*10);
+            blue = 0;
+            green = 250;
 
+        }
+        if(i > 50 && i < 76){
+            blue = (i - 50) * 10;
+            green = 250 - ((i - 50)*10);
+            red = 0;
 
-    private float[] toPolar(float[] cartesian, Rect rect) {
-        double cX = rect.width() / 2;
-        double cY = rect.height() / 2;
-        double angle = (cartesian[0]) * 2 * Math.PI;
-        double radius = (cartesian[1] / 2);
-        float[] out = {
-                (float) (cX - radius * Math.sin(angle)),
-                (float) (cY - radius * Math.cos(angle))
-        };
-        return out;
+        }
+        if(i > 75 && i < 99){
+            green = 0;
+            red = (i - 75) * 10;
+            blue = 250;
+        }
+        i = (int) (i + 1.5f);
+        if(i > 100){i = 0;}
+
+        paint.setARGB(255, red,green,blue);
     }
-
-
-
 }

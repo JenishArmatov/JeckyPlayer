@@ -17,9 +17,9 @@ import com.armatov.music.model.Genre;
 import com.armatov.music.model.Playlist;
 import com.armatov.music.ui.activities.AlbumDetailActivity;
 import com.armatov.music.ui.activities.ArtistDetailActivity;
+import com.armatov.music.ui.activities.ChangeVisualizationActivity;
 import com.armatov.music.ui.activities.GenreDetailActivity;
 import com.armatov.music.ui.activities.PlaylistDetailActivity;
-import com.armatov.music.visualizermusicplayer.ChangeVisualization;
 import com.armatov.music.visualizermusicplayer.Equalizer;
 
 public class NavigationUtil {
@@ -76,7 +76,7 @@ public class NavigationUtil {
         if (sessionId == AudioEffect.ERROR_BAD_VALUE) {
             Toast.makeText(activity, activity.getResources().getString(R.string.no_audio_ID), Toast.LENGTH_LONG).show();
         } else {
-            Intent intent = new Intent(activity, ChangeVisualization.class);
+            Intent intent = new Intent(activity, ChangeVisualizationActivity.class);
             activity.startActivity(intent);
         }
     }

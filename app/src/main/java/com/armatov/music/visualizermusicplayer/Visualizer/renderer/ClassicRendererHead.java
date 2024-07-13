@@ -7,15 +7,20 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 
-public class ClassicRendererHead {
+import com.armatov.music.visualizermusicplayer.Visualizer.renderer.interfaces.Renderer;
+
+public class ClassicRendererHead implements Renderer {
     private float[] newbytes = new float[1024];
     private float[][] arrayXYARGB = new float[3][100];
     private  Paint paint = new Paint();
     private float[] x = new float[1024*4];
+    private Paint paintColor;
 
-    public void draw(Canvas canvas, float[] mFftBytes,
-                            Rect rect, Paint paintColor) {
 
+    @Override
+    public void draw(Canvas canvas, float[] mFftBytes, float[] data) {
+        Rect rect = new Rect(0,0,canvas.getWidth(),canvas.getHeight());
+        initColorChange();
         canvas.drawColor(Color.argb(255,0,0,0));
         float width = (rect.width() - 130f)/100f;
 
@@ -116,7 +121,7 @@ public class ClassicRendererHead {
             paintColor.setAlpha((int) (magAlpha = (magAlpha) < 250 ? (int) magAlpha : 250)/2);
             paintColor.setStrokeWidth(i * 10);
 
-              canvas.drawLine(10, graund,
+            canvas.drawLine(10, graund,
                     canvas.getWidth() - 10, graund, paintColor);
 
 
@@ -157,5 +162,41 @@ public class ClassicRendererHead {
 
         }
 
+    }
 
-    }}
+    private int red = 250;
+    private int green = 0;
+    private int blue = 0;
+    private int i = 0;
+    private void initColorChange() {
+        paintColor = new Paint();
+
+        paintColor.setARGB(255, red,green,blue);
+        if(i < 26 && i > 0){
+            red = 250;
+            green = i * 10;
+            blue = 0;
+        }
+        if(i > 25 && i < 51){
+            red = 250 - ((i - 25)*10);
+            blue = 0;
+            green = 250;
+
+        }
+        if(i > 50 && i < 76){
+            blue = (i - 50) * 10;
+            green = 250 - ((i - 50)*10);
+            red = 0;
+
+        }
+        if(i > 75 && i < 99){
+            green = 0;
+            red = (i - 75) * 10;
+            blue = 250;
+        }
+        i = (int) (i + 1.5f);
+        if(i > 100){i = 0;}
+
+        paintColor.setARGB(255, red,green,blue);
+    }
+}

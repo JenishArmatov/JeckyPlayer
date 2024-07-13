@@ -8,9 +8,9 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 import com.armatov.music.visualizermusicplayer.JniBitmapHolder;
-import com.armatov.music.visualizermusicplayer.Visualizer.VisualiserView;
+import com.armatov.music.visualizermusicplayer.Visualizer.renderer.interfaces.Renderer;
 
-public class LineRenderer2 {
+public class LineRenderer2 implements Renderer {
     private int red = 250;
     private int green = 0;
     private int blue = 0;
@@ -20,18 +20,38 @@ public class LineRenderer2 {
     private Matrix matrix;
 
 
-    public void draw(Canvas canvas, float[] mFftBytes,  Rect rect, int column) {
+    private void calcolateColor(int i){
+        if(i < 26 && i > 0){
+            green = i * 10;
+        }
+        if(i > 25 && i < 51){
+            red = red - 10;
+
+        }
+        if(i > 50 && i < 76){
+            blue = blue + 10;
+            green = green - 5;
+            red = red + 1;
+
+        }
+        if(i > 75 && i < 99){
+            green = green - 5;
+            red = red + 3;
+            blue= blue - 2;
+        }
+    }
+
+    @Override
+    public void draw(Canvas canvas, float[] mFftBytes, float[] data){
+        int column = 100;
+        Rect rect = new Rect(0, 0, canvas.getWidth(), canvas.getHeight());
+
         if (matrix == null){
             b = Bitmap.createBitmap(canvas.getWidth(),canvas.getHeight(), Bitmap.Config.ARGB_8888);
             matrix = new Matrix();
             p = new Paint();
-            rect = new Rect(0,0,canvas.getWidth(),canvas.getHeight());
-
-            //p.setShadowLayer(30, 0, 0, Color.RED);
-            //  p.setMaskFilter(new BlurMaskFilter(2, BlurMaskFilter.Blur.NORMAL));
-
         }
-        int graund = (int) (canvas.getHeight() / 2);
+        int graund = (canvas.getHeight() / 2);
         canvas.drawColor(Color.argb(255,0,0,0));
         final int w=canvas.getWidth(),height=canvas.getHeight();
         final JniBitmapHolder bitmapHolder = new JniBitmapHolder(b);
@@ -95,27 +115,27 @@ public class LineRenderer2 {
             if(i < column - 1){
                 canvas1.drawLine(xStart,x[i],
                         xStart + width, x[i + 1],p);
-          //      canvas1.drawLine(xStart,graund,
-         //               xStart + width, graund,p);
+                //      canvas1.drawLine(xStart,graund,
+                //               xStart + width, graund,p);
             }
             if(i == column - 1){
                 canvas1.drawLine(xStart,x[i],
                         xStart + width, graund,p);
-           //     canvas1.drawLine(xStart,graund,
-           //             xStart + width, graund,p);
+                //     canvas1.drawLine(xStart,graund,
+                //             xStart + width, graund,p);
             }
 
             if(i < column - 1){
                 canvas1.drawLine(canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2),x[i],
                         canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2) - width, x[i + 1],p);
-            //    canvas1.drawLine(canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2),graund,
-            //            canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2) - width, graund,p);
+                //    canvas1.drawLine(canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2),graund,
+                //            canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2) - width, graund,p);
             }
             if(i == column - 1){
                 canvas1.drawLine(canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2),x[i],
                         canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2) - width, graund,p);
-               // canvas1.drawLine(canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2),graund,
-             //           canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2) - width, graund,p);
+                // canvas1.drawLine(canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2),graund,
+                //           canvas.getWidth() / 2 - (xStart - canvas.getWidth()/2) - width, graund,p);
             }
             width = width - width/(60);
             xStart = xStart + width;
@@ -146,25 +166,4 @@ public class LineRenderer2 {
         canvas.drawBitmap(b,0,0,p);
 
     }
-    private void calcolateColor(int i){
-        if(i < 26 && i > 0){
-            green = i * 10;
-        }
-        if(i > 25 && i < 51){
-            red = red - 10;
-
-        }
-        if(i > 50 && i < 76){
-            blue = blue + 10;
-            green = green - 5;
-            red = red + 1;
-
-        }
-        if(i > 75 && i < 99){
-            green = green - 5;
-            red = red + 3;
-            blue= blue - 2;
-        }
-    }
-
 }

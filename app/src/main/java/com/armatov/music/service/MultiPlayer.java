@@ -50,9 +50,6 @@ public class MultiPlayer implements Playback, IBasicMediaPlayer.OnErrorListener,
         this.context = context;
         this.factory = f;
         PreferenceUtil activityPerference = PreferenceUtil.getInstance(context);
-
-
-  //      visualiserView.link(factory);
         mCurrentMediaPlayer = (OpenSLMediaPlayer) factory.createMediaPlayer();
         link(factory);
 
@@ -87,8 +84,6 @@ public class MultiPlayer implements Playback, IBasicMediaPlayer.OnErrorListener,
         iVirtualizer.setEnabled(true);
         iVirtualizer.setStrength((short) activityPerference.getVirtualizerStrength());
 
-
-        mCurrentMediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK);
     }
     @Override
     public boolean setDataSource(@NonNull final String path) {

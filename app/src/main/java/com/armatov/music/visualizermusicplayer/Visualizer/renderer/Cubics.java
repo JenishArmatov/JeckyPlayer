@@ -5,18 +5,23 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-public class Cubics {
+import com.armatov.music.visualizermusicplayer.Visualizer.renderer.interfaces.Renderer;
+
+public class Cubics implements Renderer {
     private  float[] x = new float[1024*4];
 
-    public  void draw(Canvas canvas, float[] mFftBytes,
-                      Rect rect) {
+
+
+    @Override
+    public void draw(Canvas canvas, float[] mFftBytes, float[] data) {
+        Rect rect = new Rect(0,0,canvas.getWidth(),canvas.getHeight());
 
         canvas.drawColor(Color.argb(255,0,0,0));
         float width = (rect.width())/11 - 8;
         float height = (rect.height())/22 - 16;
 
 
-        int graund = (int) (canvas.getHeight()/2) + (canvas.getHeight()/6);
+        int graund = (canvas.getHeight()/2) + (canvas.getHeight()/6);
 
         float xStart = width*2;
 
@@ -291,5 +296,4 @@ public class Cubics {
             p.setAlpha(255);
         }
     }
-
 }

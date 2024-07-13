@@ -14,8 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.internal.ThemeSingleton;
 import com.armatov.music.R;
-import com.armatov.music.util.PreferenceUtil;
-import com.armatov.music.visualizermusicplayer.Visualizer.renderer.Draw;
+import com.armatov.music.visualizermusicplayer.Visualizer.Draw;
 import com.triggertrap.seekarc.SeekArc;
 
 import butterknife.BindView;

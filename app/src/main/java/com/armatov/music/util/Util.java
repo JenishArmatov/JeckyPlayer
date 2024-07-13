@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import com.armatov.music.R;
 
 public class Util {
+    public static int checkedItem = 0;
 
     public static int getActionBarSize(@NonNull Context context) {
         TypedValue typedValue = new TypedValue();

@@ -43,7 +43,6 @@ public class JniBitmapHolder
     public void flipBitmapVertical()
     {
         if(_handler==null){
-            Log.d("rotateBitmapCcw90", "nulllllllllll");
 
             return;
         }
@@ -52,7 +51,6 @@ public class JniBitmapHolder
     public void rotateBitmapCcw90()
     {
         if(_handler==null){
-            Log.d("rotateBitmapCcw90", "nulllllllllll");
 
             return;
         }
@@ -83,7 +81,6 @@ public class JniBitmapHolder
     public void freeBitmap()
     {
         if(_handler==null){
-            Log.d("freeBitmap", "nulllll");
 
             return;
         }
@@ -93,7 +90,6 @@ public class JniBitmapHolder
     public void scaleNNBitmap(int width, int height)
     {
         if(_handler==null){
-            Log.d("freeBitmap", "nulllll");
 
             return;
         }
@@ -106,7 +102,6 @@ public class JniBitmapHolder
         super.finalize();
         if(_handler==null)
             return;
-        Log.w("DEBUG","JNI bitmap wasn't freed nicely.please rememeber to free the bitmap as soon as you can");
         freeBitmap();
     }
 

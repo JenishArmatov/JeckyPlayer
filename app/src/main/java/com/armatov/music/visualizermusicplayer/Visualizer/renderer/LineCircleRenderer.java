@@ -6,8 +6,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import com.armatov.music.visualizermusicplayer.Visualizer.renderer.interfaces.Renderer;
 
-public class LineCircleRenderer {
+
+public class LineCircleRenderer implements Renderer {
 
     private float newbytes[] = new float[1024];
     private float magAlpha = 0;
@@ -15,8 +17,12 @@ public class LineCircleRenderer {
 
     private  float[] x = new float[1024*4];
 
-    public void draw(Canvas canvas, float[] mFftBytes,
-                     Rect rect) {
+
+
+    @Override
+    public void draw(Canvas canvas, float[] mFftBytes, float[] data) {
+        Rect rect = new Rect(0,0,canvas.getWidth(),canvas.getHeight());
+
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         canvas.drawColor(Color.argb(255,0,0,0));
@@ -110,7 +116,7 @@ public class LineCircleRenderer {
 
             p.setColor(Color.argb(255, red, green, blue));
             p.setStrokeWidth(width);
-      //      p.setStyle(Paint.Style.STROKE);
+            //      p.setStyle(Paint.Style.STROKE);
 
 
 
@@ -180,9 +186,6 @@ public class LineCircleRenderer {
 
 
     }
-
-
-
     private float[] toPolar(float[] cartesian, Rect rect) {
         double cX = rect.width() / 2;
         double cY = rect.height() / 2;
@@ -194,5 +197,4 @@ public class LineCircleRenderer {
         };
         return out;
     }
-
 }

@@ -6,18 +6,23 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import com.armatov.music.visualizermusicplayer.Visualizer.renderer.interfaces.Renderer;
+
 /**
  * Created by User on 10.06.2020.
  */
 
-public class SimpleLineRenderer {
+public class SimpleLineRenderer implements Renderer {
     int red = 250;
     int green = 0;
     int blue = 0;
     private float[] newbytes = new float[1024];
     private float[][] arrayXYARGB = new float[3][100];
     private float[] x = new float[1024*4];
-    public void draw(float[] mFftBytes,  Rect rect, Canvas canvas) {
+
+    @Override
+    public void draw(Canvas canvas, float[] mFftBytes, float[] data) {
+        Rect rect = new Rect(0,0,canvas.getWidth(),canvas.getHeight());
 
         canvas.drawColor(Color.argb(255,0,0,0));
         float width = (rect.width() - 100f)/40;

@@ -3,16 +3,40 @@ package com.armatov.music.visualizermusicplayer.Visualizer.renderer;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 
-public class ClassicRenderer {
+import com.armatov.music.visualizermusicplayer.Visualizer.renderer.interfaces.Renderer;
+
+public class ClassicRenderer implements Renderer {
     private int red = 250;
     private int green = 0;
     private int blue = 0;
     int column = 100;
     private  float[] x = new float[1024*4];
 
-    public void draw(Canvas canvas, float[] mFftBytes, Rect rect) {
+    private  void calcolateColor(int i){
+        if(i < 26 && i > 0){
+            green = i * 10;
+        }
+        if(i > 25 && i < 51){
+            red = red - 10;
+
+        }
+        if(i > 50 && i < 76){
+            blue = blue + 10;
+            green = green - 5;
+            red = red + 1;
+
+        }
+        if(i > 75 && i < 99){
+            green = green - 5;
+            red = red + 3;
+            blue= blue - 2;
+        }
+    }
+
+
+    @Override
+    public void draw(Canvas canvas, float[] mFftBytes, float[] data)  {
 
         canvas.drawColor(Color.argb(255,0,0,0));
         Paint p = new Paint();
@@ -127,25 +151,5 @@ public class ClassicRenderer {
         green = 0;
         blue = 0;
 
-    }
-    private  void calcolateColor(int i){
-        if(i < 26 && i > 0){
-            green = i * 10;
-        }
-        if(i > 25 && i < 51){
-            red = red - 10;
-
-        }
-        if(i > 50 && i < 76){
-            blue = blue + 10;
-            green = green - 5;
-            red = red + 1;
-
-        }
-        if(i > 75 && i < 99){
-            green = green - 5;
-            red = red + 3;
-            blue= blue - 2;
-        }
     }
 }

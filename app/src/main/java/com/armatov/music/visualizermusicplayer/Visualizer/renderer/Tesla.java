@@ -7,15 +7,19 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 
+import com.armatov.music.visualizermusicplayer.Visualizer.renderer.interfaces.Renderer;
 
-public class Tesla {
+
+public class Tesla implements Renderer {
     private  float[] newbytes = new float[1024*4];
     private  float[][] arrayXYARGB = new float[3][100];
     private  float[] x = new float[1024*4];
 
     private  Paint paint = new Paint();
-    public  void draw(Canvas canvas, float[] mFftBytes,
-                            Rect rect) {
+
+    @Override
+    public void draw(Canvas canvas, float[] mFftBytes, float[] data){
+        Rect rect = new Rect(0,0,canvas.getWidth(),canvas.getHeight());
 
         canvas.drawColor(Color.argb(255,0,0,0));
         float width = (rect.width()-40)/100f;
@@ -158,5 +162,4 @@ public class Tesla {
 
 
     }
-
 }

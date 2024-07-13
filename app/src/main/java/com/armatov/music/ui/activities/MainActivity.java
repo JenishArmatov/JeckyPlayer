@@ -119,8 +119,8 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
                         mRewardedAd = rewardedAd;
                     }
                 });
-        if(MainActivity.mRewardedAd != null){
-            MainActivity.mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+        if(mRewardedAd != null){
+            mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
                 @Override
                 public void onAdShowedFullScreenContent() {
                     // Called when ad is shown.
@@ -138,7 +138,7 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
                     // Called when ad is dismissed.
                     // Set the ad reference to null so you don't show the ad a second time.
                     Log.d("TAG", "Ad was dismissed.");
-                    MainActivity.mRewardedAd = null;
+                    mRewardedAd = null;
                 }
             });
         }
