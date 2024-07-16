@@ -35,14 +35,13 @@ import java.util.List;
 
 public class Draw {
 
+    private float[][] fftHistory;
+    private float[][] dataHistory;
 
-    public float[][] fftHistory = new float[100][1024 * 4];
-    public float[][] dataHistory = new float[100][1024 * 4];
-
-    public static float[] data = new float[1024 * 4];
+    private float[] data = new float[1024 * 4];
     private float[] fft = new float[1024 * 4];
 
-    public int stepForBluetoothLatency = 1;
+    private int stepForBluetoothLatency = 1;
     public static int latencyForBluetooth;
     private List<Renderer> renderers;
 
@@ -58,7 +57,11 @@ public class Draw {
     }
 
     public Draw() {
+        fftHistory = new float[100][1024 * 4];
+        dataHistory = new float[100][1024 * 4];
+
         renderers = new ArrayList<>();
+
         renderers.add(new SimpleLineRenderer());
         renderers.add(new Cubics());
         renderers.add(new ClassicRendererHead());
@@ -106,7 +109,7 @@ public class Draw {
         List<float[]> fftList = Util.calculateFft(data,fft);
 
         data = fftList.get(0);
-        fft = fftList.get(1);
+        fft  = fftList.get(1);
 
         fftHistory[stepForBluetoothLatency] = fft.clone();
         dataHistory[stepForBluetoothLatency] = data.clone();
